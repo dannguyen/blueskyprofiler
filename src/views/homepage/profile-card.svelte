@@ -6,7 +6,7 @@
 	let accountAge: number | null = profile?.createdAt ? currentAgeInDays(profile.createdAt) : null;
 </script>
 
-<div class="profile-card">
+<section class="profile-card section">
 	<div class="profile-header">
 		{#if profile.avatar}
 			<img
@@ -68,7 +68,7 @@
 			<p class="profile-indexed">Created at: {formatDate(profile.createdAt)}</p>
 		{/if}
 	</div>
-</div>
+</section>
 
 <style lang="postcss">
 	.profile-card {
@@ -100,7 +100,7 @@
 	}
 
 	.profile-stats {
-		@apply grid grid-cols-3 gap-2 mt-2;
+		@apply grid grid-cols-3 md:grid-cols-5 gap-1 mt-2;
 	}
 
 	.stat {

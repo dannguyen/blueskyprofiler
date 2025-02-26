@@ -2,6 +2,7 @@
 	import { getProfile, getUserPosts, type BlueskyProfile, type BlueskyFeedItem } from '$lib/apifoo';
 	import ProfileCard from '../views/homepage/profile-card.svelte';
 	import AnalyticsCard from '../views/homepage/analytics-card.svelte';
+	import PostsSpotlight from '../views/homepage/posts-spotlight.svelte';
 
 	import PostsList from '../views/homepage/posts-list.svelte';
 	let handle = '';
@@ -69,8 +70,13 @@
 <div class="container">
 	<div class="content">
 		<h1 class="title">Bluesky Profile Analyzer</h1>
+		<div class="footnote">
+			Github repo at <a class="link" href="http://github.com/dannguyen/blueskyprofiler/"
+				>dannguyen/blueskyprofiler
+			</a>
+		</div>
 
-		<p class="paragraph">Enter a Bluesky handle to view and analyze profile</p>
+		<div class="paragraph">Enter a Bluesky handle to view and analyze profile</div>
 
 		<form class="search-form" on:submit|preventDefault={handleSearch}>
 			<div class="input-group">
@@ -100,6 +106,8 @@
 		{#if profile}
 			<ProfileCard {profile} />
 			<AnalyticsCard {posts} {profile} />
+			<PostsSpotlight {posts} {profile} />
+
 			<PostsList {posts} {profile} />
 		{/if}
 	</div>
@@ -115,7 +123,7 @@
 	}
 
 	.title {
-		@apply text-4xl font-bold text-blue-400 mb-4;
+		@apply text-4xl font-bold text-blue-400 mb-1;
 	}
 
 	.content {
@@ -123,15 +131,18 @@
 	}
 
 	.paragraph {
-		@apply text-lg mb-4;
+		@apply text-lg mb-1;
 	}
 
+	.footnote {
+		@apply text-sm mt-0 mb-6;
+	}
 	.link {
 		@apply text-blue-400 hover:text-blue-300 underline transition-colors;
 	}
 
 	.search-form {
-		@apply mt-8 mb-4;
+		@apply mt-4 mb-4;
 	}
 
 	.input-group {

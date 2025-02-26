@@ -7,8 +7,8 @@
 </script>
 
 {#if posts.length > 0}
-	<div class="posts-section">
-		<h2 class="posts-title">Recent Posts</h2>
+	<section class="posts-list section">
+		<h2 class="section-title">Recent Posts</h2>
 
 		<div class="table-container">
 			<table class="posts-list">
@@ -18,9 +18,9 @@
 						<th>Type</th>
 						<th>Content</th>
 						<th>Words</th>
-						<th>Replies</th>
 						<th>Likes</th>
 						<th>Reposts</th>
+						<th>Replies</th>
 						<th>Quotes</th>
 					</tr>
 				</thead>
@@ -48,25 +48,21 @@
 								{/if}
 							</td>
 							<td class="post-metric">{getWordCount(item.post.record.text)}</td>
-							<td class="post-metric">{item.post.replyCount}</td>
 							<td class="post-metric">{item.post.likeCount}</td>
 							<td class="post-metric">{item.post.repostCount}</td>
+							<td class="post-metric">{item.post.replyCount}</td>
 							<td class="post-metric">{item.post.quoteCount}</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
 		</div>
-	</div>
+	</section>
 {/if}
 
 <style lang="postcss">
 	.posts-section {
 		@apply mt-8;
-	}
-
-	.posts-title {
-		@apply text-2xl font-bold text-blue-400 mb-4;
 	}
 
 	.table-container {

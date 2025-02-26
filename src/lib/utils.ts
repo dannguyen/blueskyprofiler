@@ -1,7 +1,44 @@
-import { type BlueskyPost } from '$lib/apifoo';
+import { type BlueskyPost, type BlueskyFeedItem } from '$lib/apifoo';
+
+// Format date to human-friendly format
+export function formatDate(dateString: string): string {
+	const date = new Date(dateString);
+
+	// Get month name (short format)
+	const months = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec'
+	];
+	const month = months[date.getMonth()];
+
+	// Get day and year
+	const day = date.getDate();
+	const year = date.getFullYear();
+
+	// Get hour in 12-hour format
+	let hours = date.getHours();
+	const ampm = hours >= 12 ? 'PM' : 'AM';
+	hours = hours % 12;
+	hours = hours ? hours : 12; // Convert 0 to 12
+
+	// Get minutes with leading zero
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`;
+}
 
 // Format date to truncated time format
-export function formatDate(dateString: string): string {
+export function formatIsoDate(dateString: string): string {
 	const date = new Date(dateString);
 	const year = date.getFullYear();
 	const month = String(date.getMonth() + 1).padStart(2, '0');
