@@ -1,7 +1,7 @@
 /**
  * Base URL for the Bluesky API
  */
-export const API_HOST = "https://public.api.bsky.app";
+export const API_HOST = 'https://public.api.bsky.app';
 
 /**
  * Common error handler for API requests
@@ -9,6 +9,6 @@ export const API_HOST = "https://public.api.bsky.app";
  * @param context - Additional context about the error
  */
 export function handleApiError(error: unknown, context: string): never {
-  console.error(`Error ${context}:`, error);
-  throw error;
+	console.error(`Error ${context}:`, error);
+	throw error;
 }

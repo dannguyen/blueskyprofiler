@@ -10,8 +10,10 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
+		"lintw": "prettier --write .",
 		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run"
+		"test": "npm run test:unit -- --run",
+		"gh-pages": "npm run build && git checkout gh-pages && rm -rf docs && cp -r build docs && touch docs/.nojekyll && git add docs && git commit -m \"deploy $(date -u +\"%Y-%m-%dT%H:%M:%SZ\")\" && git push -u origin gh-pages && git checkout main"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
