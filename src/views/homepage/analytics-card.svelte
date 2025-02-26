@@ -304,7 +304,9 @@
 	{/if}
 {/if}
 
-<style lang="postcss">
+<style>
+	@reference "../../app.css";
+
 	.analytics-grid {
 		@apply grid grid-cols-2 md:grid-cols-3 gap-4 mt-2;
 	}

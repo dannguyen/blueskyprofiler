@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getProfile, getUserPosts, type BlueskyProfile, type BlueskyFeedItem } from '$lib/apifoo';
+	import { SITE_TITLE } from '$lib';
 	import ProfileCard from '../views/homepage/profile-card.svelte';
 	import AnalyticsCard from '../views/homepage/analytics-card.svelte';
 	import PostsSpotlight from '../views/homepage/posts-spotlight.svelte';
@@ -69,7 +70,7 @@
 
 <div class="container">
 	<div class="content">
-		<h1 class="title">Bluesky Profile Analyzer</h1>
+		<h1 class="title">{SITE_TITLE}</h1>
 		<div class="footnote">
 			Github repo at <a class="link" href="http://github.com/dannguyen/blueskyprofiler/"
 				>dannguyen/blueskyprofiler
@@ -113,7 +114,8 @@
 	</div>
 </div>
 
-<style lang="postcss">
+<style>
+	@reference "../app.css";
 	:global(html) {
 		@apply bg-gray-900 text-gray-100;
 	}
@@ -150,7 +152,7 @@
 	}
 
 	.input-field {
-		@apply flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+		@apply flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500;
 	}
 
 	.search-button {

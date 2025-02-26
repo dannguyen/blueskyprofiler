@@ -70,7 +70,8 @@
 	</div>
 </section>
 
-<style lang="postcss">
+<style>
+	@reference "../../app.css";
 	.profile-card {
 		@apply mt-6 bg-gray-700/50 rounded-lg p-4 border border-gray-600 flex flex-col gap-4;
 	}

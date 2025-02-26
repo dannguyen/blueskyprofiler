@@ -151,7 +151,8 @@
 	{/if}
 {/if}
 
-<style lang="postcss">
+<style>
+	@reference "../../app.css";
 	.best-posts {
 		@apply mb-10;
 	}
@@ -226,7 +227,7 @@
 	}
 
 	.post-header-left {
-		@apply flex flex-col flex-grow;
+		@apply flex flex-col grow;
 	}
 
 	.post-header-right {

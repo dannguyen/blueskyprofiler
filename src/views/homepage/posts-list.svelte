@@ -60,7 +60,8 @@
 	</section>
 {/if}
 
-<style lang="postcss">
+<style>
+	@reference "../../app.css";
 	.posts-section {
 		@apply mt-8;
 	}
