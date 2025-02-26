@@ -1,0 +1,27 @@
+{
+    "did": "did:plc:6wpkkitfdkgthatfvspcfmjo",
+    "handle": "dril.bsky.social",
+    "displayName": "wint",
+    "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:6wpkkitfdkgthatfvspcfmjo/bafkreiggofiqpdnz6tfajmu7i5gdqyl7j27h22bqivpmkymuzwd5kcudfm@jpeg",
+    "associated": {
+        "lists": 0,
+        "feedgens": 0,
+        "starterPacks": 0,
+        "labeler": false,
+        "chat": {
+            "allowIncoming": "all"
+        }
+    },
+    "labels": [],
+    "createdAt": "2023-04-27T16:46:45.754Z",
+    "description": "Never Bullshit\nI challenge any and every one who wants to kick my ass to a debate .\n\nhttps://www.patreon.com/dril\nhttps://www.instagram.com/dril_real\n\nhttps://linktr.ee/drilreal",
+    "indexedAt": "2025-02-08T17:32:25.044Z",
+    "banner": "https://cdn.bsky.app/img/banner/plain/did:plc:6wpkkitfdkgthatfvspcfmjo/bafkreib5lg5aktp2vpb73b6xmvmoiv7i5jkahiuude7gp7ky6ifawmrx3u@jpeg",
+    "followersCount": 523417,
+    "followsCount": 116,
+    "postsCount": 387,
+    "pinnedPost": {
+        "cid": "bafyreigzvgzxcikbsub4jeuuwkntvghnvvjjaobzsrlyv3dixqy74e2aoy",
+        "uri": "at://did:plc:6wpkkitfdkgthatfvspcfmjo/app.bsky.feed.post/3lcjnbvar5k2s"
+    }
+}
