@@ -124,21 +124,25 @@ export function getPostType(post: BlueskyPost, profileHandle?: string): string {
 	else if (post.record.reply) {
 		return 'reply';
 	}
-	// Check if it has images
-	else if (post.embed?.$type?.includes('app.bsky.embed.images')) {
-		return 'images';
-	}
 	// Check if it has video
 	else if (post.embed?.$type?.includes('app.bsky.embed.record')) {
 		return 'quote';
 	}
-	// Check if it's a quote post
-	else if (post.embed?.$type?.includes('app.bsky.embed.video')) {
-		return 'video';
-	}
 	// Default type is a text post
 	else {
 		return 'post';
+	}
+}
+
+export function getPostMediaType(post: BlueskyPost): string {
+	if (post.embed?.$type?.includes('app.bsky.embed.images')) {
+		return 'image';
+	}
+	// Check if it's a quote post
+	else if (post.embed?.$type?.includes('app.bsky.embed.video')) {
+		return 'video';
+	} else {
+		return 'text';
 	}
 }
 

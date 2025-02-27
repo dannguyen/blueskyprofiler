@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { type BlueskyProfile, type BlueskyFeedItem, type BlueskyPost } from '$lib/apifoo';
 	import { formatDate } from '$lib/utils';
-	import { getPostType } from '$lib/utils';
+	import { getPostType, getPostMediaType } from '$lib/utils';
 
 	export let posts: BlueskyFeedItem[] = [];
 	export let profile: BlueskyProfile | null = null;
@@ -26,6 +26,7 @@
 				originalPostCount: 0,
 				postsPerDay: 0,
 				postTypes: { reply: 0, images: 0, video: 0, quote: 0, post: 0, repost: posts.length },
+				postMediaTypes: {},
 				engagement: {
 					replies: { total: 0, average: 0 },
 					likes: { total: 0, average: 0 },
@@ -49,11 +50,15 @@
 		// Count post types
 		const postTypes = {
 			reply: 0,
-			images: 0,
-			video: 0,
 			quote: 0,
 			post: 0,
 			repost: 0
+		};
+
+		const postMediaTypes = {
+			image: 0,
+			video: 0,
+			text: 0
 		};
 
 		// Count engagement
@@ -71,6 +76,12 @@
 			// Increment post type counter
 			const type = getPostType(item.post, profile?.handle);
 			postTypes[type as keyof typeof postTypes]++;
+
+			const mType = getPostMediaType(item.post);
+			if (type != 'repost') {
+				// i.e. an original post
+				postMediaTypes[mType as keyof typeof postMediaTypes]++;
+			}
 
 			// Add engagement metrics (exclude reposts as they don't represent engagement for the user)
 			if (type !== 'repost') {
@@ -103,6 +114,7 @@
 			regularPostCount: regularPosts.length,
 			postsPerDay: +(originalPosts.length / dateRangeDays).toFixed(1),
 			postTypes,
+			postMediaTypes,
 			engagement: {
 				replies: {
 					total: totalReplies,
@@ -250,52 +262,46 @@
 					</div>
 
 					<div class="analytics-subsection">
-						<h4 class="analytics-section-title">Regular Posts</h4>
+						<!-- show the media type per original post -->
+						<h4 class="analytics-section-title">Media</h4>
 						<div class="analytics-stat">
 							<span class="analytics-label">Text only:</span>
 							<span class="analytics-value"
-								>{analytics.postTypes.post} ({Math.round(
-									(analytics.postTypes.post / analytics.totalPosts) * 100
+								>{analytics.postMediaTypes.text} ({Math.round(
+									(analytics.postMediaTypes.text / analytics.originalPostCount) * 100
+								)}%)</span
+							>
+						</div>
+						<div class="analytics-stat">
+							<span class="analytics-label">With video:</span>
+							<span class="analytics-value"
+								>{analytics.postMediaTypes.video} ({Math.round(
+									(analytics.postMediaTypes.video / analytics.originalPostCount) * 100
 								)}%)</span
 							>
 						</div>
 						<div class="analytics-stat">
 							<span class="analytics-label">With images:</span>
 							<span class="analytics-value"
-								>{analytics.postTypes.images} ({Math.round(
-									(analytics.postTypes.images / analytics.totalPosts) * 100
+								>{analytics.postMediaTypes.image} ({Math.round(
+									(analytics.postMediaTypes.image / analytics.originalPostCount) * 100
 								)}%)</span
 							>
 						</div>
-						<div class="analytics-stat">
-							<span class="analytics-label">Videos:</span>
-							<span class="analytics-value"
-								>{analytics.postTypes.video} ({Math.round(
-									(analytics.postTypes.video / analytics.totalPosts) * 100
-								)}%)</span
-							>
-						</div>
-					</div>
 
-					<div class="analytics-subsection">
-						<h4 class="analytics-section-title">Media</h4>
-						<div class="analytics-stat">
-							<span class="analytics-label">Total videos:</span>
-							<span class="analytics-value">{analytics.postTypes.video}</span>
-						</div>
-						<div class="analytics-stat">
-							<span class="analytics-label">Total images:</span>
-							<span class="analytics-value">{analytics.media.totalImages}</span>
-						</div>
-						<div class="analytics-stat">
-							<span class="analytics-label">Images with alt text:</span>
-							<span class="analytics-value"
-								>{analytics.media.imagesWithAlt} of {analytics.media.totalImages}</span
-							>
-						</div>
-						<div class="analytics-stat">
-							<span class="analytics-label">Alt text percentage:</span>
-							<span class="analytics-value">{analytics.media.altTextPercentage}%</span>
+						<div class="analytics-subsection">
+							<div class="analytics-stat">
+								<span class="analytics-label">Image count:</span>
+								<span class="analytics-value">{analytics.media.totalImages}</span>
+							</div>
+							<div class="analytics-stat">
+								<span class="analytics-label">Images w/ ALT text:</span>
+								<span class="analytics-value">{analytics.media.imagesWithAlt}</span>
+							</div>
+							<div class="analytics-stat">
+								<span class="analytics-label">ALT text %:</span>
+								<span class="analytics-value">{analytics.media.altTextPercentage}%</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -308,7 +314,7 @@
 	@reference "../../app.css";
 
 	.analytics-grid {
-		@apply grid grid-cols-2 md:grid-cols-3 gap-4 mt-2;
+		@apply grid grid-cols-2 md:grid-cols-2 gap-8 mt-2;
 	}
 
 	.analytics-section {
@@ -317,6 +323,10 @@
 
 	.analytics-subsection {
 		@apply mt-3;
+		.analytics-subsection {
+			@apply mt-0;
+			@apply pl-3;
+		}
 	}
 	.analytics-section-title {
 		@apply text-sm text-gray-300 font-medium mb-2 border-b border-gray-700 pb-1;
