@@ -1,0 +1,349 @@
+{
+	"follows": [
+		{
+			"did": "did:plc:linrigsaay5zenhg756ca6tg",
+			"handle": "matthieu.bsky.team",
+			"displayName": "Matthieu",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:linrigsaay5zenhg756ca6tg/bafkreib3x2psccjdi6rnugggfjxjdx7p7tfkdvh3fh7w3qsj4d7uwootve@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [
+				{
+					"src": "did:plc:linrigsaay5zenhg756ca6tg",
+					"uri": "at://did:plc:linrigsaay5zenhg756ca6tg/app.bsky.actor.profile/self",
+					"cid": "bafyreigsfka3ied7b3dclydg5bf4bkbxrktqw25vi6wlhnvtl3xlopguvy",
+					"val": "!no-unauthenticated",
+					"cts": "1970-01-01T00:00:00.000Z"
+				}
+			],
+			"createdAt": "2023-09-25T07:39:09.202Z",
+			"description": "Back-end engineer at Bluesky 🦋",
+			"indexedAt": "2025-01-21T07:57:22.944Z"
+		},
+		{
+			"did": "did:plc:p2cp5gopk7mgjegy6wadk3ep",
+			"handle": "samuel.bsky.team",
+			"displayName": "Samuel",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:p2cp5gopk7mgjegy6wadk3ep/bafkreidjwjidj2dydp3uxwiqk35znldgea3l3dkjzkgetft2bfezhuae2a@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-04-14T18:12:06.575Z",
+			"description": "the work is mysterious and important",
+			"indexedAt": "2025-02-07T23:38:11.044Z"
+		},
+		{
+			"did": "did:plc:tl7zqgil2irwndwojsxszceb",
+			"handle": "jessica200.bsky.social",
+			"displayName": "Jessica Freitas",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:tl7zqgil2irwndwojsxszceb/bafkreia64cc2igzkv3jxedtzokugof2cldsjfrdseushpf2vizzvz3ersm@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [
+				{
+					"src": "did:plc:tl7zqgil2irwndwojsxszceb",
+					"uri": "at://did:plc:tl7zqgil2irwndwojsxszceb/app.bsky.actor.profile/self",
+					"cid": "bafyreibutti5rurk6zcfuqn23ww2oh2uayvbjgoxm7pogbjznmtss3ggoq",
+					"val": "!no-unauthenticated",
+					"cts": "1970-01-01T00:00:00.000Z"
+				}
+			],
+			"createdAt": "2024-01-24T23:22:25.808Z",
+			"indexedAt": "2025-01-17T18:24:14.944Z"
+		},
+		{
+			"did": "did:plc:oisofpd7lj26yvgiivf3lxsi",
+			"handle": "hailey.at",
+			"displayName": "hailey",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:oisofpd7lj26yvgiivf3lxsi/bafkreiamh2ttfdzmphr3d6lvyponxxrxg4ktp7grnyhvhddrburtlaal4y@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-08-15T03:48:23.045Z",
+			"description": "some sort of engineer @bsky.app",
+			"indexedAt": "2025-02-26T18:34:13.146Z"
+		},
+		{
+			"did": "did:plc:vzmlifz3ghar4cu2hj3srga2",
+			"handle": "martin.kleppmann.com",
+			"displayName": "Martin Kleppmann",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:vzmlifz3ghar4cu2hj3srga2/bafkreialtwun2i7ywne7qil3rqvhmhgpwc5uhf6ulpjdgpiezm2l637aeu@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [],
+			"createdAt": "2022-11-18T10:22:57.934Z",
+			"description": "Associate Professor at @cst.cam.ac.uk, researching decentralised systems and security protocols. Advisor to the Bluesky team. Wrote “Designing Data-Intensive Applications” (O’Reilly). he/him",
+			"indexedAt": "2024-11-28T10:58:25.845Z"
+		},
+		{
+			"did": "did:plc:fpruhuo22xkm5o7ttr2ktxdo",
+			"handle": "danabra.mov",
+			"displayName": "dan",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:fpruhuo22xkm5o7ttr2ktxdo/bafkreif43mhqajnbnl62u3ezf37g6x22nd762im54thxbil4ga46eugcga@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-04-08T20:19:22.589Z",
+			"description": "For Occupation — This —",
+			"indexedAt": "2025-02-19T23:14:43.145Z"
+		},
+		{
+			"did": "did:plc:upo6iq6ekh66d4mbhmiy6se4",
+			"handle": "foysal.it",
+			"displayName": "Foysal",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:upo6iq6ekh66d4mbhmiy6se4/bafkreifbpxxwoxa3c3ic3mbkpp6hvngypst6qfpmauhdssxgqfma5a6ddy@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-05-12T20:01:46.361Z",
+			"description": "Build things.",
+			"indexedAt": "2025-02-25T14:36:14.044Z"
+		},
+		{
+			"did": "did:plc:3jpt2mvvsumj2r7eqk4gzzjz",
+			"handle": "esb.lol",
+			"displayName": "Eric",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:3jpt2mvvsumj2r7eqk4gzzjz/bafkreiaexnb3bkzbaxktm5q3l3txyweflh3smcruigesvroqjrqxec4zv4@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-05-02T03:39:27.863Z",
+			"description": "Engineer @ Bluesky, bikes, beer, Iowan in Chicago",
+			"indexedAt": "2024-12-02T03:33:35.447Z"
+		},
+		{
+			"did": "did:plc:q6gjnaw2blty4crticxkmujt",
+			"handle": "jaz.bsky.social",
+			"displayName": "Jaz",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:q6gjnaw2blty4crticxkmujt/bafkreigio6g2gv3phaprfjukxpwytdyxyic45reldeptypywkt7xrhi3h4@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-04-14T05:32:52.328Z",
+			"description": "Jaz\nGender Nomad\nIRC made me gay\nBackend (Go) & Infra @ Bsky\nDoes musical things and computer things\n27. they/them 🏳️‍⚧️\nBSky Stats- https://bsky.jazco.dev/stats\nhttps://github.com/ericvolp12",
+			"indexedAt": "2024-11-13T06:59:13.982Z"
+		},
+		{
+			"did": "did:plc:eon2iu7v3x2ukgxkqaf7e5np",
+			"handle": "safety.bsky.app",
+			"displayName": "Bluesky Safety",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:eon2iu7v3x2ukgxkqaf7e5np/bafkreih7mgyv6dugcguewqnuev64i7jsljhtrr6olfadmxq2dasfb7woam@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "none"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-07-17T21:54:28.741Z",
+			"description": "Sharing updates about trust and safety on Bluesky.\n\nThis account’s mentions are not actively monitored. To report a post or account, use the in-app reporting feature.\n\nCommunity Guidelines: https://bsky.social/about/support/community-guidelines",
+			"indexedAt": "2024-02-08T00:51:47.063Z"
+		},
+		{
+			"did": "did:plc:vjug55kidv6sye7ykr5faxxn",
+			"handle": "emilyliu.me",
+			"displayName": "Emily Liu",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:vjug55kidv6sye7ykr5faxxn/bafkreia63347vwjt4sgfkedgvytodt22ugfck5o36qotwaflsf3qq5xj3y@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-01-16T20:48:16.028Z",
+			"description": "🌱 emilyliu.me",
+			"indexedAt": "2025-01-26T08:02:52.843Z"
+		},
+		{
+			"did": "did:plc:tpg43qhh4lw4ksiffs4nbda3",
+			"handle": "jacob.gold",
+			"displayName": "Jake Gold",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:tpg43qhh4lw4ksiffs4nbda3/bafkreiems5id4gwiko7s3gffilosjowemvtse2p3uq6wrh62gogskp5vci@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-01-04T18:08:01.779Z",
+			"description": "Former engineer @ Tech giant Bluesky\n\nMountain View, CA\n\nI like people and other animals, technology, programming, history, gaming, and a lot of other stuff. I probably like you.\n\nViews expressed here are my own.\n\nDMs open. Email: bluesky@jacob.gold",
+			"indexedAt": "2024-11-13T02:29:25.687Z"
+		},
+		{
+			"did": "did:plc:vpkhqolt662uhesyj6nxm7ys",
+			"handle": "why.bsky.team",
+			"displayName": "Dlaczego",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:vpkhqolt662uhesyj6nxm7ys/bafkreihyxe6v7wu6ozh5qooqbqe6lvmhyxxxcemoxjsw4aivtds6eplrwq@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2022-11-17T01:04:43.624Z",
+			"description": "Technical advisor to @bluesky, first engineer at Protocol Labs. Wizard Utopian",
+			"indexedAt": "2025-02-27T19:21:43.747Z"
+		},
+		{
+			"did": "did:plc:qjeavhlw222ppsre4rscd3n2",
+			"handle": "rose.bsky.team",
+			"displayName": "Rose 🌹",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:qjeavhlw222ppsre4rscd3n2/bafkreiegdbepxyjj5mvqqtyqsocyafpiwol7eabcvxqfuiu7ai4bsgmzeu@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2022-11-22T05:02:21.193Z",
+			"description": "Bluesky team 🦋",
+			"indexedAt": "2024-12-05T23:30:24.143Z"
+		},
+		{
+			"did": "did:plc:44ybard66vv44zksje25o7dz",
+			"handle": "bnewbold.net",
+			"displayName": "bryan newbold",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:44ybard66vv44zksje25o7dz/bafkreiglnysron3h2je7nf6cmvtimuaxi7xe2c7rkxitmks3mzmajnc2ou@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [],
+			"createdAt": "2022-12-18T06:56:26.676Z",
+			"description": "dweb, cycling, snow, big cities, wiki. I like speculating about found objects.\nprotocol engineer @bsky.app. formerly archive.org\nelsewhere: bnewbold.net / @bnewbold@social.coop",
+			"indexedAt": "2025-02-19T03:19:11.147Z"
+		},
+		{
+			"did": "did:plc:fgsn4gf2dlgnybo4nbej5b2s",
+			"handle": "anshnanda.com",
+			"displayName": "Ansh",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:fgsn4gf2dlgnybo4nbej5b2s/bafkreiem2uhkh2sqgqlwq3hw2yatiirdhrp2et5lsbtgoztsujx4qchwiy@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-02-28T22:48:54.842Z",
+			"description": "Helped build this app a lil bit!\n\nPrev: Engineering @ Bluesky",
+			"indexedAt": "2025-01-27T02:53:35.743Z"
+		},
+		{
+			"did": "did:plc:yk4dd2qkboz2yv6tpubpc6co",
+			"handle": "dholms.xyz",
+			"displayName": "daniel 🫠",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:yk4dd2qkboz2yv6tpubpc6co/bafkreidc5amuohqqhturw5xeuswgtyrywkpn4z4v7zwbk4f6cdshl5c2ne@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [],
+			"createdAt": "2022-11-17T01:07:13.996Z",
+			"description": "dreaming of protocol level sovereignty \n\nbsky team 🌅",
+			"indexedAt": "2024-10-15T15:44:11.506Z"
+		},
+		{
+			"did": "did:plc:l3rouwludahu3ui3bt66mfvj",
+			"handle": "divy.zone",
+			"displayName": "devin ivy 🐋",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:l3rouwludahu3ui3bt66mfvj/bafkreicg6y3mlr3eszmbjm3swyuncwf4ruzohcsvtcbrjzyhkwibtx7nyy@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2022-11-17T00:39:19.084Z",
+			"description": "🌀 bluesky team",
+			"indexedAt": "2024-10-10T22:58:39.210Z"
+		},
+		{
+			"did": "did:plc:oky5czdrnfjpqslsw2a5iclo",
+			"handle": "jay.bsky.team",
+			"displayName": "Jay 🦋",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:oky5czdrnfjpqslsw2a5iclo/bafkreihidru2xruxdxlvvcixc7lbgoudzicjbrdgacdhdhxyfw4yut4nfq@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [],
+			"createdAt": "2022-11-17T06:31:40.296Z",
+			"description": "CEO of Bluesky, steward of AT Protocol. \n\nLet’s build a federated republic, starting with this server. 🌱 🪴 🌳 ",
+			"indexedAt": "2024-11-21T05:23:48.069Z"
+		},
+		{
+			"did": "did:plc:ragtjsm2j2vknwkz3zp4oxrd",
+			"handle": "pfrazee.com",
+			"displayName": "Paul Frazee",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:ragtjsm2j2vknwkz3zp4oxrd/bafkreihhpqdyntku66himwor5wlhtdo44hllmngj2ofmbqnm25bdm454wq@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [],
+			"createdAt": "2022-11-17T00:35:16.391Z",
+			"description": "Developer at Bluesky.",
+			"indexedAt": "2025-01-07T18:07:49.942Z"
+		},
+		{
+			"did": "did:plc:z72i7hdynmk6r22z27h6tvur",
+			"handle": "bsky.app",
+			"displayName": "Bluesky",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:z72i7hdynmk6r22z27h6tvur/bafkreihagr2cmvl2jt4mgx3sppwe2it3fwolkrbtjrhcnwjk4jdijhsoze@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "none"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-04-12T04:53:57.057Z",
+			"description": "official Bluesky account (check username👆)\n\nBugs, feature requests, feedback: support@bsky.app",
+			"indexedAt": "2024-12-18T07:43:57.542Z"
+		}
+	],
+	"subject": {
+		"did": "did:plc:ewvi7nxzyoun6zhxrhs64oiz",
+		"handle": "atproto.com",
+		"displayName": "AT Protocol Developers",
+		"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:ewvi7nxzyoun6zhxrhs64oiz/bafkreibjfgx2gprinfvicegelk5kosd6y2frmqpqzwqkg7usac74l3t2v4@jpeg",
+		"associated": {
+			"chat": {
+				"allowIncoming": "none"
+			}
+		},
+		"labels": [],
+		"createdAt": "2023-04-26T06:19:25.508Z",
+		"description": "Social networking technology created by Bluesky. \n\nDeveloper-focused account. Follow @bsky.app for general announcements!\n\nBluesky API docs: docs.bsky.app\nAT Protocol specs: atproto.com",
+		"indexedAt": "2024-02-06T15:26:43.170Z"
+	}
+}

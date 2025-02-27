@@ -1,0 +1,31 @@
+{
+	"post": {
+		"uri": "at://did:plc:6wpkkitfdkgthatfvspcfmjo/app.bsky.feed.post/3lirwer3l4s2r",
+		"cid": "bafyreihzy6khdc6k7h2nozvi4x37ibxgpjtzjvvg4ecrdjg5xurrz3cxni",
+		"author": {
+			"did": "did:plc:6wpkkitfdkgthatfvspcfmjo",
+			"handle": "dril.bsky.social",
+			"displayName": "wint",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:6wpkkitfdkgthatfvspcfmjo/bafkreiggofiqpdnz6tfajmu7i5gdqyl7j27h22bqivpmkymuzwd5kcudfm@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "all"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-04-27T16:46:45.754Z"
+		},
+		"record": {
+			"$type": "app.bsky.feed.post",
+			"createdAt": "2025-02-22T18:14:53.607Z",
+			"langs": ["en"],
+			"text": "quick update: the man makig dog noises outside my apt ended up being just a dog. to all Gorgeous women who DMed me asking if im ok—thank you"
+		},
+		"replyCount": 142,
+		"repostCount": 1235,
+		"likeCount": 16695,
+		"quoteCount": 11,
+		"indexedAt": "2025-02-22T18:14:39.356Z",
+		"labels": []
+	}
+}

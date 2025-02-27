@@ -108,7 +108,6 @@
 			<ProfileCard {profile} />
 			<AnalyticsCard {posts} {profile} />
 			<PostsSpotlight {posts} {profile} />
-
 			<PostsList {posts} {profile} />
 		{/if}
 	</div>

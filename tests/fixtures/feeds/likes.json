@@ -1,0 +1,167 @@
+{
+	"likes": [
+		{
+			"actor": {
+				"did": "did:plc:x2ecybdvueoy4kpxdlc4hsbb",
+				"handle": "hampuspublic.swifties.social",
+				"displayName": "Hampy ⸆⸉",
+				"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:x2ecybdvueoy4kpxdlc4hsbb/bafkreidz32lyvlcu66obnxe3dkl6mxg6zinsn3ps3e3u6ywcgdkhcshmoe@jpeg",
+				"associated": {
+					"chat": {
+						"allowIncoming": "following"
+					}
+				},
+				"labels": [],
+				"createdAt": "2024-08-30T20:10:12.836Z",
+				"description": "you've got a smile that could light up this whole town\n\n@hampuspublic on Twitter and Instagram\n\n22, she/they 🇸🇪",
+				"indexedAt": "2025-02-20T19:20:31.747Z"
+			},
+			"createdAt": "2025-02-23T14:01:56.577Z",
+			"indexedAt": "2025-02-23T14:01:54.560Z"
+		},
+		{
+			"actor": {
+				"did": "did:plc:6wnyd6gxfszpjft4i7gjnqrc",
+				"handle": "easy-fx.bsky.social",
+				"displayName": "Easy-FX",
+				"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:6wnyd6gxfszpjft4i7gjnqrc/bafkreic6bezm2nvmnk3pqer6z3346bcqe2ifopliy5tg4n5qbmr4gj72gi@jpeg",
+				"labels": [],
+				"createdAt": "2025-02-01T11:19:58.844Z",
+				"description": "FXは海外FX 📈 米国株 💵・日経 💹など投資全般が大好きな🌏世界の経済＋文化ギーク😀\n\nXM口座 👉 http://bit.ly/3FB8uqR\nFXGT口座 👉 http://bit.ly/3Q6FnRt\nIS6FX口座 👉 http://bit.ly/3ytzVQr\n分析ツールはTradingView 👉 http://bit.ly/3XrMuX4\n\nWeb: easyfx.jp",
+				"indexedAt": "2025-02-01T11:23:59.245Z"
+			},
+			"createdAt": "2025-02-21T22:47:42.915Z",
+			"indexedAt": "2025-02-21T22:47:42.915Z"
+		},
+		{
+			"actor": {
+				"did": "did:plc:oxvle5ugac24bknqqtoq4xu4",
+				"handle": "caitlin-is-tired19.bsky.social",
+				"displayName": "Caitlin",
+				"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:oxvle5ugac24bknqqtoq4xu4/bafkreid3d2p7pqusgvnawzptn2oxppgsafnnn2rofo3ug54unq7jy6cpdu@jpeg",
+				"associated": {
+					"chat": {
+						"allowIncoming": "all"
+					}
+				},
+				"labels": [],
+				"createdAt": "2024-09-02T06:33:35.198Z",
+				"description": "Lover of the obscure and absurd. 19, not exactly straight, metalhead and enjoyer of sustainable farming practices.",
+				"indexedAt": "2024-12-07T18:35:17.245Z"
+			},
+			"createdAt": "2025-02-15T20:30:09.998Z",
+			"indexedAt": "2025-02-15T20:30:09.998Z"
+		},
+		{
+			"actor": {
+				"did": "did:plc:ywop7sbpd3wfwrvofulq7hdy",
+				"handle": "amh157.bsky.social",
+				"displayName": "",
+				"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:ywop7sbpd3wfwrvofulq7hdy/bafkreigzfoplunn3g4fy4njq4ohbbt2p747hiuxuzhv6ie5eczypdxyvdy@jpeg",
+				"associated": {
+					"chat": {
+						"allowIncoming": "none"
+					}
+				},
+				"labels": [],
+				"createdAt": "2024-11-15T01:01:27.644Z",
+				"description": "Wife, mother, grandmother. \nLifelong Democrat.\nIt's only 4 years doesn't work for someone looking at 70.\n#Survivor #Resister",
+				"indexedAt": "2025-02-15T20:37:58.346Z"
+			},
+			"createdAt": "2025-02-15T20:12:27.969Z",
+			"indexedAt": "2025-02-15T20:12:27.969Z"
+		},
+		{
+			"actor": {
+				"did": "did:plc:eruew6fc7v4l7qon4tithhed",
+				"handle": "guilhermelp.bsky.social",
+				"displayName": "Gui",
+				"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:eruew6fc7v4l7qon4tithhed/bafkreigtdh3upd6kdnxogibxvzwso2ivu7yuptxubyic2iadasypgiyjnq@jpeg",
+				"associated": {
+					"chat": {
+						"allowIncoming": "following"
+					}
+				},
+				"labels": [],
+				"createdAt": "2023-11-04T22:42:37.534Z",
+				"description": "Fã de filmes e jogos de terror 🧟‍♂️\n\nTô sempre jogando DbD.\n\n📍Santa Catarina, Brasil.",
+				"indexedAt": "2024-10-10T13:31:35.907Z"
+			},
+			"createdAt": "2025-02-15T18:54:13.550Z",
+			"indexedAt": "2025-02-15T18:54:13.550Z"
+		},
+		{
+			"actor": {
+				"did": "did:plc:hnrezan2sqwxoxjnqrkdpkkr",
+				"handle": "fullsizetalk.bsky.social",
+				"displayName": "Fullsize Talk",
+				"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:hnrezan2sqwxoxjnqrkdpkkr/bafkreidg5qxjxp3viv32xhy7zcr7t77vqheaqclkvwrkzu6ocidvmyy7y4@jpeg",
+				"associated": {
+					"chat": {
+						"allowIncoming": "all"
+					}
+				},
+				"labels": [],
+				"createdAt": "2024-04-25T19:53:03.562Z",
+				"description": "Podcast de picapes full-size gerido pelo clube @FullsizeMania\n🔗 https://bit.ly/FullsizeTalk",
+				"indexedAt": "2024-05-03T00:54:06.704Z"
+			},
+			"createdAt": "2025-02-13T22:35:05.016Z",
+			"indexedAt": "2025-02-13T22:35:05.016Z"
+		},
+		{
+			"actor": {
+				"did": "did:plc:y3neuppxvelish2ia3wbpufq",
+				"handle": "fullsizemania.bsky.social",
+				"displayName": "Fullsize Mania",
+				"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:y3neuppxvelish2ia3wbpufq/bafkreibmjqky6alzlmmptd23w4fba4l6rqnldnyp2ptkk4lnamvcxxmlee@jpeg",
+				"associated": {
+					"chat": {
+						"allowIncoming": "all"
+					}
+				},
+				"labels": [],
+				"createdAt": "2024-04-18T22:14:11.201Z",
+				"description": "▪ Unanimidade na web em picapes full-size\n▪ Tudo sobre F-1000, D-20, Ram, Tundra\n▪ Ouça nosso podcast: @FullsizeTalk\n🔗 https://linktr.ee/FullsizeMania",
+				"indexedAt": "2024-06-26T21:41:29.580Z"
+			},
+			"createdAt": "2025-02-13T22:02:21.083Z",
+			"indexedAt": "2025-02-13T22:02:21.083Z"
+		},
+		{
+			"actor": {
+				"did": "did:plc:th4vyxtkp6epndnmqhmy2mot",
+				"handle": "vaema.bsky.social",
+				"displayName": "Vaema",
+				"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:th4vyxtkp6epndnmqhmy2mot/bafkreib6r27wixcx5bu7dwnwtep5ahsu46pkqtqijxnokf6pnanwps4mmu@jpeg",
+				"associated": {
+					"chat": {
+						"allowIncoming": "none"
+					}
+				},
+				"labels": [],
+				"createdAt": "2024-08-21T12:12:12.587Z",
+				"description": "I am a video game designer and modder, primarily with the job of programming. I also do art, music, and writing. Profile made by: Slapadabass.",
+				"indexedAt": "2024-11-14T19:35:33.023Z"
+			},
+			"createdAt": "2025-02-10T15:41:49.606Z",
+			"indexedAt": "2025-02-10T15:41:49.606Z"
+		},
+		{
+			"actor": {
+				"did": "did:plc:rqxaztdy7a4bb2xnicedm6t4",
+				"handle": "plumishnumish.bsky.social",
+				"displayName": "Sir.Plumis ",
+				"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:rqxaztdy7a4bb2xnicedm6t4/bafkreibspd23dym7tkxuc4gxgp2we37rxq2ao7gnrya73mslohjsxvijm4@jpeg",
+				"labels": [],
+				"createdAt": "2024-12-03T03:16:12.047Z",
+				"description": "Hello everyone. \nI post about worldbuilding, making art and the beauty of nature. I hope you like what I do and stick around.\n🌲🩷✍️🎨\n",
+				"indexedAt": "2025-02-26T23:42:50.645Z"
+			},
+			"createdAt": "2025-02-10T02:32:45.225Z",
+			"indexedAt": "2025-02-10T02:32:45.225Z"
+		}
+	],
+	"cursor": "2025-02-10T02:32:45.225Z",
+	"uri": "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.post/3le6bze3nus2c"
+}

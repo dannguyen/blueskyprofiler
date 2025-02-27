@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { type BlueskyProfile, type BlueskyFeedItem, type BlueskyPost } from '$lib/apifoo';
-	import { formatDate } from '$lib/utils';
-	import { getPostType, postURL, getWordCount } from '$lib/utils';
+	import { formatDate, prettifyInteger } from '$lib/utils';
+	import { getPostType, postURL } from '$lib/utils';
 
 	export let posts: BlueskyFeedItem[] = [];
 	export let profile: BlueskyProfile | null = null;
@@ -85,24 +85,22 @@
 
 								<div class="post-metrics">
 									<div class="metric" title="Likes">
-										<span class="metric-icon">👍</span><span class="metric-value"
-											>{post.likeCount || 0}</span
-										>
+										<span class="metric-icon">
+											<i class="fa-regular fa-thumbs-up"></i>
+										</span>
+										<span class="metric-value">{prettifyInteger(post.likeCount || 0)}</span>
 									</div>
 									<div class="metric" title="Reposts">
-										<span class="metric-icon">🔁</span><span class="metric-value"
-											>{post.repostCount || 0}</span
-										>
+										<i class="fa-regular fa-copy"></i>
+										<span class="metric-value">{prettifyInteger(post.repostCount || 0)}</span>
 									</div>
 									<div class="metric" title="Replies">
-										<span class="metric-icon">💬</span><span class="metric-value"
-											>{post.replyCount || 0}</span
-										>
+										<i class="fa-regular fa-comment"></i>
+										<span class="metric-value">{prettifyInteger(post.replyCount || 0)}</span>
 									</div>
 									<div class="metric" title="Quotes">
-										<span class="metric-icon">❞</span><span class="metric-value"
-											>{post.quoteCount || 0}</span
-										>
+										<i class="fa-regular fa-comments"></i>
+										<span class="metric-value">{prettifyInteger(post.quoteCount || 0)}</span>
 									</div>
 								</div>
 							</div>
@@ -243,7 +241,7 @@
 	}
 
 	.metric {
-		@apply flex items-center whitespace-nowrap;
+		@apply flex items-center whitespace-nowrap text-xs;
 	}
 
 	.metric-value {

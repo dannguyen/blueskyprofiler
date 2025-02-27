@@ -120,7 +120,7 @@ export interface BlueskyAuthorFeedResponse {
  */
 export async function getUserPosts(
 	handle: string,
-	limit: number = 20,
+	limit: number = 100,
 	cursor?: string
 ): Promise<BlueskyAuthorFeedResponse> {
 	if (!handle) {
@@ -144,33 +144,5 @@ export async function getUserPosts(
 	} catch (error) {
 		handleApiError(error, `fetching posts for ${handle}`);
 		return { feed: [] }; // TypeScript requires this even though handleApiError throws
-	}
-}
-
-/**
- * Get a specific post by URI
- * @param uri - URI of the post to fetch
- * @returns Promise that resolves to the post or null if not found
- */
-export async function getPost(uri: string): Promise<BlueskyPost | null> {
-	if (!uri) {
-		return null;
-	}
-
-	try {
-		const response = await fetch(
-			`${API_HOST}/xrpc/app.bsky.feed.getPostThread?uri=${encodeURIComponent(uri)}`
-		);
-
-		if (!response.ok) {
-			throw new Error(`API request failed with status ${response.status}`);
-		}
-
-		const data = await response.json();
-		// The thread.post property contains the requested post
-		return (data.thread?.post as BlueskyPost) || null;
-	} catch (error) {
-		handleApiError(error, `fetching post ${uri}`);
-		return null; // TypeScript requires this even though handleApiError throws
 	}
 }

@@ -1,4 +1,14 @@
 import { type BlueskyPost, type BlueskyFeedItem } from '$lib/apifoo';
+import numeral from 'numeral';
+
+export function prettifyInteger(num: number): string {
+	const numi = Math.round(num);
+	let fmt = '0';
+	if (num >= 1000) {
+		fmt = '0.0 a';
+	}
+	return numeral(numi).format(fmt);
+}
 
 // Format date to human-friendly format
 export function formatDate(dateString: string): string {
