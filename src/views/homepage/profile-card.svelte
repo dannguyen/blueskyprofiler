@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type BlueskyProfile } from '$lib/apifoo';
+	import { type BlueskyProfile } from '$lib/bskyfoo';
 	import { formatDate, currentAgeInDays, currentAgePrettified } from '$lib/utils';
 	export let profile: BlueskyProfile | null = null;
 
@@ -56,7 +56,9 @@
 
 		{#if profile.postsCount !== undefined}
 			<div class="stat">
-				<span class="stat-value">{(profile.postsCount / accountAge).toLocaleString()}</span>
+				<span class="stat-value"
+					>{Math.round(profile.postsCount / accountAge, 1).toLocaleString()}</span
+				>
 				<span class="stat-label">Posts/Day</span>
 			</div>
 		{/if}

@@ -6,7 +6,6 @@
 
 https://docs.bsky.app/docs/api/app-bsky-actor-get-profile
 
-get profile
 https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=bsky.app
 
 ## graph
@@ -29,6 +28,12 @@ https://docs.bsky.app/docs/api/app-bsky-feed-get-author-feed
 
 100 posts from an author's feed
 https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=bsky.app&limit=100
+
+just posts
+
+https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?limit=100&actor=bsky.app
+
+https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?limit=20&actor=nytimes.com
 
 ### get quotes
 

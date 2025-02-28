@@ -1,0 +1,139 @@
+{
+	"post": {
+		"uri": "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.post/3lbstepcz422v",
+		"cid": "bafyreia24hvexke6q7yhubi3vwssr7nm74jvnt4a36xo6cgjvuuva44hgm",
+		"author": {
+			"did": "did:plc:z72i7hdynmk6r22z27h6tvur",
+			"handle": "bsky.app",
+			"displayName": "Bluesky",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:z72i7hdynmk6r22z27h6tvur/bafkreihagr2cmvl2jt4mgx3sppwe2it3fwolkrbtjrhcnwjk4jdijhsoze@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "none"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-04-12T04:53:57.057Z"
+		},
+		"record": {
+			"$type": "app.bsky.feed.post",
+			"createdAt": "2024-11-26T00:57:28.872Z",
+			"embed": {
+				"$type": "app.bsky.embed.record",
+				"record": {
+					"cid": "bafyreifohcetdw6e5mudaz6anigzsm5ssjpm3oreyxu4a2l665k7hpxo4q",
+					"uri": "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.post/3lbsizxfxa22r"
+				}
+			},
+			"langs": ["en"],
+			"text": "Livestream starting in a few minutes 👇"
+		},
+		"embed": {
+			"$type": "app.bsky.embed.record#view",
+			"record": {
+				"$type": "app.bsky.embed.record#viewRecord",
+				"uri": "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.post/3lbsizxfxa22r",
+				"cid": "bafyreifohcetdw6e5mudaz6anigzsm5ssjpm3oreyxu4a2l665k7hpxo4q",
+				"author": {
+					"did": "did:plc:z72i7hdynmk6r22z27h6tvur",
+					"handle": "bsky.app",
+					"displayName": "Bluesky",
+					"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:z72i7hdynmk6r22z27h6tvur/bafkreihagr2cmvl2jt4mgx3sppwe2it3fwolkrbtjrhcnwjk4jdijhsoze@jpeg",
+					"associated": {
+						"chat": {
+							"allowIncoming": "none"
+						}
+					},
+					"labels": [],
+					"createdAt": "2023-04-12T04:53:57.057Z"
+				},
+				"value": {
+					"$type": "app.bsky.feed.post",
+					"createdAt": "2024-11-25T21:52:30.840Z",
+					"embed": {
+						"$type": "app.bsky.embed.external",
+						"external": {
+							"description": "Bluesky is social media as it should be. Find your community among millions of users, unleash your creativity, and have some fun again. https://bsky.app",
+							"thumb": {
+								"$type": "blob",
+								"ref": {
+									"$link": "bafkreihh7dthuxfqel6zwcmxapcu47tr34rat7thjtxlfmrwidvxfsmqne"
+								},
+								"mimeType": "image/jpeg",
+								"size": 384236
+							},
+							"title": "BlueskySocial - Twitch",
+							"uri": "https://www.twitch.tv/blueskysocial"
+						}
+					},
+					"facets": [
+						{
+							"$type": "app.bsky.richtext.facet",
+							"features": [
+								{
+									"$type": "app.bsky.richtext.facet#mention",
+									"did": "did:plc:qjeavhlw222ppsre4rscd3n2"
+								}
+							],
+							"index": {
+								"byteEnd": 55,
+								"byteStart": 40
+							}
+						},
+						{
+							"$type": "app.bsky.richtext.facet",
+							"features": [
+								{
+									"$type": "app.bsky.richtext.facet#mention",
+									"did": "did:plc:ragtjsm2j2vknwkz3zp4oxrd"
+								}
+							],
+							"index": {
+								"byteEnd": 76,
+								"byteStart": 64
+							}
+						},
+						{
+							"$type": "app.bsky.richtext.facet",
+							"features": [
+								{
+									"$type": "app.bsky.richtext.facet#mention",
+									"did": "did:plc:4ewnpnebeh7zuk5pbardaxqz"
+								}
+							],
+							"index": {
+								"byteEnd": 226,
+								"byteStart": 203
+							}
+						}
+					],
+					"langs": ["en"],
+					"text": "Join us for another livestream with COO @rose.bsky.team and CTO @pfrazee.com, where they'll share team updates, the story of how Bluesky began, and what’s next. \n\nPlus, a special guest appearance from @flavorflav.bsky.social! 🎉\n\nToday 11/25 @ 5 pm PT / 8 pm ET / 1 am GMT / 10am JST"
+				},
+				"labels": [],
+				"likeCount": 10527,
+				"replyCount": 352,
+				"repostCount": 1226,
+				"quoteCount": 89,
+				"indexedAt": "2024-11-25T21:52:35.058Z",
+				"embeds": [
+					{
+						"$type": "app.bsky.embed.external#view",
+						"external": {
+							"uri": "https://www.twitch.tv/blueskysocial",
+							"title": "BlueskySocial - Twitch",
+							"description": "Bluesky is social media as it should be. Find your community among millions of users, unleash your creativity, and have some fun again. https://bsky.app",
+							"thumb": "https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:z72i7hdynmk6r22z27h6tvur/bafkreihh7dthuxfqel6zwcmxapcu47tr34rat7thjtxlfmrwidvxfsmqne@jpeg"
+						}
+					}
+				]
+			}
+		},
+		"replyCount": 215,
+		"repostCount": 555,
+		"likeCount": 6413,
+		"quoteCount": 27,
+		"indexedAt": "2024-11-26T00:57:29.358Z",
+		"labels": []
+	}
+}

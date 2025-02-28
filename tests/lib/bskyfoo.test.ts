@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getProfile, API_HOST, BlueskyProfile } from '../../src/lib/apifoo';
+import { getProfile, API_HOST, BlueskyProfile } from '../../src/lib/bskyfoo';
 import profileFixture from '../fixtures/profile.json';
 
 // Create a copy of the fixture to use in tests
@@ -8,7 +8,7 @@ const mockProfile: BlueskyProfile = { ...profileFixture };
 // Mock the global fetch function
 global.fetch = vi.fn();
 
-describe('apifoo Functions', () => {
+describe('bskyfoo Functions', () => {
 	describe('getProfile', () => {
 		beforeEach(() => {
 			vi.resetAllMocks();

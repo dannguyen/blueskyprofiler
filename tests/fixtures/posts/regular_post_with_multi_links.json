@@ -1,0 +1,94 @@
+{
+	"post": {
+		"uri": "at://did:plc:oy2ebrbjfsmr3oacqe5mbuw5/app.bsky.feed.post/3lj7f4bp3o22c",
+		"cid": "bafyreigkyjq3rgrqezazwy552le2duz2azupixbzjxizg223bsdeqmesom",
+		"author": {
+			"did": "did:plc:oy2ebrbjfsmr3oacqe5mbuw5",
+			"handle": "dancow.bsky.social",
+			"displayName": "Dan Nguyen",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:oy2ebrbjfsmr3oacqe5mbuw5/bafkreigntqxqkv3jqamjyhuhed6cwdwdo3vruitr56uli7wa3qtlhoghqu@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-04-27T18:10:15.521Z"
+		},
+		"record": {
+			"$type": "app.bsky.feed.post",
+			"createdAt": "2025-02-28T02:43:11.760Z",
+			"embed": {
+				"$type": "app.bsky.embed.external",
+				"external": {
+					"description": "",
+					"thumb": {
+						"$type": "blob",
+						"ref": {
+							"$link": "bafkreicodrzsaw2hyfz46ljddh2ny6nuw4jjag36pcpimlszfywq4i3fpe"
+						},
+						"mimeType": "image/jpeg",
+						"size": 612459
+					},
+					"title": "Nicolas Cage - Wikipedia",
+					"uri": "https://en.wikipedia.org/wiki/Nicolas_Cage"
+				}
+			},
+			"facets": [
+				{
+					"features": [
+						{
+							"$type": "app.bsky.richtext.facet#link",
+							"uri": "https://en.wikipedia.org/wiki/Nicolas_Cage"
+						}
+					],
+					"index": {
+						"byteEnd": 38,
+						"byteStart": 6
+					}
+				},
+				{
+					"features": [
+						{
+							"$type": "app.bsky.richtext.facet#link",
+							"uri": "https://example.com"
+						}
+					],
+					"index": {
+						"byteEnd": 51,
+						"byteStart": 40
+					}
+				},
+				{
+					"features": [
+						{
+							"$type": "app.bsky.richtext.facet#link",
+							"uri": "https://www.spacejam.com/1996/"
+						}
+					],
+					"index": {
+						"byteEnd": 75,
+						"byteStart": 53
+					}
+				}
+			],
+			"langs": ["en"],
+			"text": "test\n\nen.wikipedia.org/wiki/Nicolas...\n\nexample.com\n\nwww.spacejam.com/1996/\n\nendtest"
+		},
+		"embed": {
+			"$type": "app.bsky.embed.external#view",
+			"external": {
+				"uri": "https://en.wikipedia.org/wiki/Nicolas_Cage",
+				"title": "Nicolas Cage - Wikipedia",
+				"description": "",
+				"thumb": "https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:oy2ebrbjfsmr3oacqe5mbuw5/bafkreicodrzsaw2hyfz46ljddh2ny6nuw4jjag36pcpimlszfywq4i3fpe@jpeg"
+			}
+		},
+		"replyCount": 0,
+		"repostCount": 0,
+		"likeCount": 0,
+		"quoteCount": 0,
+		"indexedAt": "2025-02-28T02:43:13.254Z",
+		"labels": []
+	}
+}

@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { getProfile, getUserPosts, type BlueskyProfile, type BlueskyFeedItem } from '$lib/apifoo';
+	import {
+		getProfile,
+		getUserPosts,
+		type BlueskyProfile,
+		type BlueskyFeedItem
+	} from '$lib/bskyfoo';
 	import { SITE_TITLE } from '$lib';
 	import ProfileCard from '../views/homepage/profile-card.svelte';
 	import AnalyticsCard from '../views/homepage/analytics-card.svelte';

@@ -1,7 +1,47 @@
 <script lang="ts">
-	import { type BlueskyProfile, type BlueskyFeedItem, type BlueskyPost } from '$lib/apifoo';
+	import {
+		type BlueskyProfile,
+		type BlueskyFeedItem,
+		type BlueskyPost,
+		getPostType,
+		getPostMediaType,
+		extractPostLink
+	} from '$lib/bskyfoo';
 	import { formatDate } from '$lib/utils';
-	import { getPostType, getPostMediaType } from '$lib/utils';
+
+	/**
+	 * Process the posts array and count the frequency of domains from external links
+	 * @param posts - Array of BlueskyFeedItems to analyze
+	 * @returns Array of objects with domain and count, sorted by count in descending order
+	 */
+	function getDomainFrequency(posts: BlueskyFeedItem[]): Array<{ domain: string; count: number }> {
+		// Create a map to store domain counts
+		const domainMap = new Map<string, number>();
+
+		// Process each post
+		posts.forEach((item) => {
+			// Extract link information from the post
+			const linkInfo = extractPostLink(item.post);
+
+			// If a domain was found and isn't empty
+			if (linkInfo && linkInfo.domain) {
+				// Increment the count for this domain
+				const currentCount = domainMap.get(linkInfo.domain) || 0;
+				domainMap.set(linkInfo.domain, currentCount + 1);
+			}
+		});
+
+		// Convert the map to an array of objects
+		const result = Array.from(domainMap.entries()).map(([domain, count]) => ({
+			domain,
+			count
+		}));
+
+		// Sort by count in descending order
+		result.sort((a, b) => b.count - a.count);
+
+		return result;
+	}
 
 	export let posts: BlueskyFeedItem[] = [];
 	export let profile: BlueskyProfile | null = null;
@@ -19,6 +59,8 @@
 			(item) => !['quote', 'reply'].includes(getPostType(item.post, profile?.handle))
 		);
 
+		const linkedDomains = getDomainFrequency(posts);
+
 		// Handle edge case where there are no original posts (only reposts)
 		if (originalPosts.length === 0) {
 			return {
@@ -34,7 +76,8 @@
 					quotes: { total: 0, average: 0 }
 				},
 				dateRange: { earliest: new Date(), latest: new Date(), days: 0 },
-				media: { totalImages: 0, imagesWithAlt: 0, altTextPercentage: 0 }
+				media: { totalImages: 0, imagesWithAlt: 0, altTextPercentage: 0 },
+				linkedDomains: {}
 			};
 		}
 
@@ -142,7 +185,8 @@
 				totalImages,
 				imagesWithAlt,
 				altTextPercentage
-			}
+			},
+			linkedDomains
 		};
 	}
 </script>
@@ -305,6 +349,15 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="analytics-section linking-activity">
+					<h4 class="analytics-section-title">Domains Linked</h4>
+					<ul class="domains-list">
+						{#each analytics.linkedDomains as item}
+							<li>{item.domain} ({item.count})</li>
+						{/each}
+					</ul>
+				</div>
 			</div>
 		</section>
 	{/if}
@@ -314,7 +367,7 @@
 	@reference "../../app.css";
 
 	.analytics-grid {
-		@apply grid grid-cols-2 md:grid-cols-2 gap-8 mt-2;
+		@apply grid grid-cols-2 md:grid-cols-3 gap-4 mt-2;
 	}
 
 	.analytics-section {
@@ -342,5 +395,9 @@
 
 	.analytics-value {
 		@apply text-white font-medium sm:mt-0 mt-1;
+	}
+
+	.domains-list li {
+		@apply text-sm text-gray-400;
 	}
 </style>

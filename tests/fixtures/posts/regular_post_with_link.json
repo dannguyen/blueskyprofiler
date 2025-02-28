@@ -1,0 +1,56 @@
+{
+	"post": {
+		"uri": "at://did:plc:eclio37ymobqex2ncko63h4r/app.bsky.feed.post/3lj7du3smos2l",
+		"cid": "bafyreicdkdd5xlqjskbmtcywzj3unecmjm7rfzi325m6ikasfwswazcrd4",
+		"author": {
+			"did": "did:plc:eclio37ymobqex2ncko63h4r",
+			"handle": "nytimes.com",
+			"displayName": "The New York Times",
+			"avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:eclio37ymobqex2ncko63h4r/bafkreidvvqj5jymmpaeklwkpq6gi532el447mjy2yultuukypzqm5ohfju@jpeg",
+			"associated": {
+				"chat": {
+					"allowIncoming": "following"
+				}
+			},
+			"labels": [],
+			"createdAt": "2023-06-05T18:50:31.498Z"
+		},
+		"record": {
+			"$type": "app.bsky.feed.post",
+			"createdAt": "2025-02-28T02:20:43.408Z",
+			"embed": {
+				"$type": "app.bsky.embed.external",
+				"external": {
+					"description": "",
+					"thumb": {
+						"$type": "blob",
+						"ref": {
+							"$link": "bafkreibxjm6htaomvhhqg4hrjdqi3la24iehox4p2esb52rsd7vgrwff3i"
+						},
+						"mimeType": "image/jpeg",
+						"size": 364934
+					},
+					"title": "Trump Live Updates: News on Mass Firings, Russia-Ukraine and Tariffs",
+					"uri": "https://www.nytimes.com/live/2025/02/27/us/trump-news?smtyp=cur&smid=bsky-nytimes"
+				}
+			},
+			"langs": ["en"],
+			"text": "Breaking News: A federal judge ordered the White House to retract directives that led to the mass firing of government workers, calling the action “illegal.”"
+		},
+		"embed": {
+			"$type": "app.bsky.embed.external#view",
+			"external": {
+				"uri": "https://www.nytimes.com/live/2025/02/27/us/trump-news?smtyp=cur&smid=bsky-nytimes",
+				"title": "Trump Live Updates: News on Mass Firings, Russia-Ukraine and Tariffs",
+				"description": "",
+				"thumb": "https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:eclio37ymobqex2ncko63h4r/bafkreibxjm6htaomvhhqg4hrjdqi3la24iehox4p2esb52rsd7vgrwff3i@jpeg"
+			}
+		},
+		"replyCount": 10,
+		"repostCount": 80,
+		"likeCount": 350,
+		"quoteCount": 5,
+		"indexedAt": "2025-02-28T02:20:45.551Z",
+		"labels": []
+	}
+}

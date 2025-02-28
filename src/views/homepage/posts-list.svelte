@@ -1,7 +1,12 @@
 <script lang="ts">
-	import { type BlueskyProfile, type BlueskyFeedItem, type BlueskyPost } from '$lib/apifoo';
+	import {
+		type BlueskyProfile,
+		type BlueskyFeedItem,
+		type BlueskyPost,
+		getPostType,
+		postURL
+	} from '$lib/bskyfoo';
 	import { formatDate, formatIsoDate, prettifyInteger } from '$lib/utils';
-	import { getPostType, postURL } from '$lib/utils';
 	export let posts: BlueskyFeedItem[] = [];
 	export let profile: BlueskyProfile | null = null;
 
@@ -70,7 +75,7 @@
 					{#each filteredPosts as item}
 						<tr class="post-item {getPostType(item.post, profile?.handle)}">
 							<td>
-								<div class="post-createdAt">
+								<div class="post-date">
 									<a href={postURL(item.post)} target="_blank" class="link">
 										{formatIsoDate(item.post.record.createdAt)}
 									</a>
@@ -146,5 +151,9 @@
 
 	.post-item.repost td.post-metric {
 		@apply text-gray-400;
+	}
+
+	.post-date {
+		@apply text-xs;
 	}
 </style>

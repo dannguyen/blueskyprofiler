@@ -1,4 +1,4 @@
-import { type BlueskyPost, type BlueskyFeedItem } from '$lib/apifoo';
+import { type BlueskyPost, type BlueskyFeedItem } from '$lib/bskyfoo';
 import numeral from 'numeral';
 
 export function prettifyInteger(num: number): string {
@@ -114,44 +114,22 @@ export function currentAgePrettified(days: number): string {
 	return result.trim();
 }
 
-// Determine post type based on its structure and content
-export function getPostType(post: BlueskyPost, profileHandle?: string): string {
-	// Check if it's a repost (author handle is different from profile handle)
-	if (profileHandle && post.author.handle !== profileHandle) {
-		return 'repost';
-	}
-	// Check if it's a reply
-	else if (post.record.reply) {
-		return 'reply';
-	}
-	// Check if it has video
-	else if (post.embed?.$type?.includes('app.bsky.embed.record')) {
-		return 'quote';
-	}
-	// Default type is a text post
-	else {
-		return 'post';
-	}
-}
+export function extractUrlDomain(url: string): string {
+	try {
+		// Create a URL object to parse the URL
+		const urlObj = new URL(url);
+		// Get the hostname and normalize it
+		let hostname = urlObj.hostname.toLowerCase();
 
-export function getPostMediaType(post: BlueskyPost): string {
-	if (post.embed?.$type?.includes('app.bsky.embed.images')) {
-		return 'image';
-	}
-	// Check if it's a quote post
-	else if (post.embed?.$type?.includes('app.bsky.embed.video')) {
-		return 'video';
-	} else {
-		return 'text';
-	}
-}
+		// Remove trailing slash
+		hostname = hostname.endsWith('/') ? hostname.slice(0, -1) : hostname;
 
-// Generate a direct URL to the post on Bluesky's web interface
-export function postURL(post: BlueskyPost): string {
-	// Extract the final element from the URI (the post ID)
-	const uriParts = post.uri.split('/');
-	const postId = uriParts[uriParts.length - 1];
+		// Remove "www." prefix if it exists
+		hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
 
-	// Construct the URL using the author's handle and post ID
-	return `https://bsky.app/profile/${post.author.handle}/post/${postId}`;
+		return hostname;
+	} catch (error) {
+		// Return empty string if URL is invalid
+		return '';
+	}
 }

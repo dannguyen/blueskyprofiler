@@ -1,7 +1,12 @@
 <script lang="ts">
-	import { type BlueskyProfile, type BlueskyFeedItem, type BlueskyPost } from '$lib/apifoo';
+	import {
+		type BlueskyProfile,
+		type BlueskyFeedItem,
+		type BlueskyPost,
+		getPostType,
+		postURL
+	} from '$lib/bskyfoo';
 	import { formatDate, prettifyInteger } from '$lib/utils';
-	import { getPostType, postURL } from '$lib/utils';
 
 	export let posts: BlueskyFeedItem[] = [];
 	export let profile: BlueskyProfile | null = null;
