@@ -1,67 +1,24 @@
 import { type BlueskyPost, type BlueskyFeedItem } from '$lib/bskyfoo';
 import numeral from 'numeral';
 
-export function prettifyInteger(num: number): string {
-	const numi = Math.round(num);
-	let fmt = '0';
-	if (num >= 1000) {
-		fmt = '0.0 a';
+// Process handle input to handle common formats
+export function cleanHandleInput(rawHandle: string): string {
+	if (!rawHandle) return '';
+
+	// Trim whitespace
+	let cleanHandle = rawHandle.trim().toLocaleLowerCase();
+
+	// Remove @ prefix if present
+	if (cleanHandle.startsWith('@')) {
+		cleanHandle = cleanHandle.substring(1);
 	}
-	return numeral(numi).format(fmt);
-}
 
-// Format date to human-friendly format
-export function formatDate(dateString: string): string {
-	const date = new Date(dateString);
+	// Add default domain if no dot is present
+	if (!cleanHandle.includes('.')) {
+		cleanHandle = `${cleanHandle}.bsky.social`;
+	}
 
-	// Get month name (short format)
-	const months = [
-		'Jan',
-		'Feb',
-		'Mar',
-		'Apr',
-		'May',
-		'Jun',
-		'Jul',
-		'Aug',
-		'Sep',
-		'Oct',
-		'Nov',
-		'Dec'
-	];
-	const month = months[date.getMonth()];
-
-	// Get day and year
-	const day = date.getDate();
-	const year = date.getFullYear();
-
-	// Get hour in 12-hour format
-	let hours = date.getHours();
-	const ampm = hours >= 12 ? 'PM' : 'AM';
-	hours = hours % 12;
-	hours = hours ? hours : 12; // Convert 0 to 12
-
-	// Get minutes with leading zero
-	const minutes = String(date.getMinutes()).padStart(2, '0');
-
-	return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`;
-}
-
-// Format date to truncated time format
-export function formatIsoDate(dateString: string): string {
-	const date = new Date(dateString);
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0');
-	const day = String(date.getDate()).padStart(2, '0');
-	const hours = String(date.getHours()).padStart(2, '0');
-	const minutes = String(date.getMinutes()).padStart(2, '0');
-
-	return `${year}-${month}-${day} ${hours}:${minutes}`;
-}
-
-// Get word count from post text
-export function getWordCount(text: string): number {
-	return text.trim().split(/\s+/).length;
+	return cleanHandle;
 }
 
 // Calculate the age in days between the current date and the provided date
@@ -132,4 +89,67 @@ export function extractUrlDomain(url: string): string {
 		// Return empty string if URL is invalid
 		return '';
 	}
+}
+
+// Format date to human-friendly format
+export function formatDate(dateString: string): string {
+	const date = new Date(dateString);
+
+	// Get month name (short format)
+	const months = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec'
+	];
+	const month = months[date.getMonth()];
+
+	// Get day and year
+	const day = date.getDate();
+	const year = date.getFullYear();
+
+	// Get hour in 12-hour format
+	let hours = date.getHours();
+	const ampm = hours >= 12 ? 'PM' : 'AM';
+	hours = hours % 12;
+	hours = hours ? hours : 12; // Convert 0 to 12
+
+	// Get minutes with leading zero
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`;
+}
+
+// Format date to truncated time format
+export function formatIsoDate(dateString: string): string {
+	const date = new Date(dateString);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+export function prettifyInteger(num: number): string {
+	const numi = Math.round(num);
+	let fmt = '0';
+	if (num >= 1000) {
+		fmt = '0.0 a';
+	}
+	return numeral(numi).format(fmt);
+}
+
+// Get word count from post text
+export function getWordCount(text: string): number {
+	return text.trim().split(/\s+/).length;
 }

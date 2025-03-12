@@ -1,81 +1,28 @@
 <script lang="ts">
-	import {
-		getProfile,
-		getUserPosts,
-		type BlueskyProfile,
-		type BlueskyFeedItem
-	} from '$lib/bskyfoo';
 	import { SITE_TITLE } from '$lib';
-	import ProfileCard from '../views/homepage/profile-card.svelte';
-	import AnalyticsCard from '../views/homepage/analytics-card.svelte';
-	import PostsSpotlight from '../views/homepage/posts-spotlight.svelte';
-
-	import PostsList from '../views/homepage/posts-list.svelte';
+	import { cleanHandleInput } from '$lib/utils';
 	let handle = '';
-	let searchMessage = '';
-	let profile: BlueskyProfile | null = null;
-	let posts: BlueskyFeedItem[] = [];
 	let isLoading = false;
-	let error: string | null = null;
 
-	import { formatDate } from '$lib/utils';
+	import { goto } from '$app/navigation';
+	import { resolveRoute } from '$app/paths';
 
-	// Process handle input to handle common formats
-	function processHandleInput(rawHandle: string): string {
-		if (!rawHandle) return '';
-
-		// Trim whitespace
-		let cleanHandle = rawHandle.trim();
-
-		// Remove @ prefix if present
-		if (cleanHandle.startsWith('@')) {
-			cleanHandle = cleanHandle.substring(1);
-		}
-
-		// Add default domain if no dot is present
-		if (!cleanHandle.includes('.')) {
-			cleanHandle = `${cleanHandle}.bsky.social`;
-		}
-
-		return cleanHandle;
-	}
-
-	async function handleSearch() {
+	function handleSearch() {
 		if (!handle) return;
 
 		// Process handle to handle common input patterns
-		const processedHandle = processHandleInput(handle);
+		const processedHandle = cleanHandleInput(handle);
 
-		isLoading = true;
-		searchMessage = `Searching for ${processedHandle}...`;
-		error = null;
-		profile = null;
-		posts = [];
-
-		try {
-			// Step 1: Fetch the user profile
-			profile = await getProfile(processedHandle);
-
-			if (profile) {
-				// Step 2: Fetch the user's posts (100 instead of 25)
-				searchMessage = `Fetching posts for ${processedHandle}...`;
-				const postsResponse = await getUserPosts(processedHandle, 100);
-				posts = postsResponse.feed;
-			}
-
-			searchMessage = '';
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'An error occurred fetching data';
-			searchMessage = '';
-		} finally {
-			isLoading = false;
-		}
+		// Navigate to the search page with the processed handle
+		goto(resolveRoute(`/search/${processedHandle}`));
 	}
 </script>
 
 <div class="container">
 	<div class="content">
-		<h1 class="title">{SITE_TITLE}</h1>
+		<h1 class="title">
+			<a href={resolveRoute('/')}>{SITE_TITLE}</a>
+		</h1>
 		<div class="footnote">
 			Github repo at <a class="link" href="http://github.com/dannguyen/blueskyprofiler/"
 				>dannguyen/blueskyprofiler
@@ -93,28 +40,20 @@
 					class="input-field"
 					disabled={isLoading}
 				/>
-				<button type="submit" class="search-button" disabled={isLoading}>
-					{isLoading ? 'Searching...' : 'Search'}
-				</button>
+				<button type="submit" class="search-button" disabled={isLoading}> Search </button>
 			</div>
 		</form>
 
-		{#if searchMessage}
-			<p class="search-message">{searchMessage}</p>
-		{/if}
-
-		{#if error}
-			<div class="error-message">
-				<p>Error: {error}</p>
-			</div>
-		{/if}
-
-		{#if profile}
-			<ProfileCard {profile} />
-			<AnalyticsCard {posts} {profile} />
-			<PostsSpotlight {posts} {profile} />
-			<PostsList {posts} {profile} />
-		{/if}
+		<div class="examples">
+			<p class="example-title">Examples:</p>
+			<ul class="example-list">
+				<li>
+					<a href="/search/jamesgunn.bsky.social" class="example-link">jamesgunn.bsky.social</a>
+				</li>
+				<li><a href="/search/theonion.com" class="example-link">theonion.com</a></li>
+				<li><a href="/search/jay.bsky.team" class="example-link">jay.bsky.team</a></li>
+			</ul>
+		</div>
 	</div>
 </div>
 
@@ -167,7 +106,23 @@
 		@apply mt-4 text-lg text-yellow-300 font-medium;
 	}
 
-	.error-message {
-		@apply mt-4 p-3 bg-red-900/50 border border-red-700 rounded-md text-red-200;
+	.examples {
+		@apply mt-8 p-4 bg-gray-700/30 border border-gray-700 rounded-lg;
+	}
+
+	.example-title {
+		@apply mb-2 font-medium text-gray-300;
+	}
+
+	.example-list {
+		@apply ml-4 list-disc;
+	}
+
+	.example-list li {
+		@apply mb-1;
+	}
+
+	.example-link {
+		@apply text-blue-400 hover:text-blue-300 transition-colors;
 	}
 </style>

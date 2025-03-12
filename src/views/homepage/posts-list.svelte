@@ -59,54 +59,66 @@
 			/>
 		</div>
 
-		<div class="table-container">
-			<table class="posts-list">
-				<thead class="posts-list-header">
-					<tr>
-						<th>Date</th>
-						<th>Content</th>
-						<th><i class="icon fa-regular fa-thumbs-up"></i> Likes</th>
-						<th><i class="icon fa-regular fa-copy"></i> Reposts</th>
-						<th><i class="icon fa-regular fa-comment"></i> Replies</th>
-						<th><i class="icon fa-regular fa-comments"></i> Quotes</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each filteredPosts as item}
-						<tr class="post-item {getPostType(item.post, profile?.handle)}">
-							<td>
-								<div class="post-date">
-									<a href={postURL(item.post)} target="_blank" class="link">
-										{formatIsoDate(item.post.record.createdAt)}
-									</a>
-								</div>
+		<div class="posts-container">
+			<div class="posts-header">
+				<div class="header-item header-date">Date</div>
+				<div class="header-item header-content">Content</div>
+				<div class="header-item header-metrics">
+					<div class="metric-item"><i class="icon fa-regular fa-thumbs-up"></i> Likes</div>
+					<div class="metric-item"><i class="icon fa-regular fa-copy"></i> Reposts</div>
+					<div class="metric-item"><i class="icon fa-regular fa-comment"></i> Replies</div>
+					<div class="metric-item"><i class="icon fa-regular fa-comments"></i> Quotes</div>
+				</div>
+			</div>
 
-								<div class="post-type">
-									{getPostType(item.post, profile?.handle)}
-								</div>
-							</td>
-							<td class="post-text post-metric">
-								<div class="text-content">
-									{item.post.record.text}
-								</div>
-								{#if item.post.embed?.images}
-									<div class="image-indicator">
-										<span
-											>+{item.post.embed.images.length} image{item.post.embed.images.length > 1
-												? 's'
-												: ''}</span
-										>
-									</div>
-								{/if}
-							</td>
-							<td class="post-metric">{item.post.likeCount}</td>
-							<td class="post-metric">{item.post.repostCount}</td>
-							<td class="post-metric">{item.post.replyCount}</td>
-							<td class="post-metric">{item.post.quoteCount}</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+			{#each filteredPosts as item}
+				<div class="post-row {getPostType(item.post, profile?.handle)}">
+					<div class="post-date-column">
+						<div class="post-date">
+							<a href={postURL(item.post)} target="_blank" class="link">
+								{formatIsoDate(item.post.record.createdAt)}
+							</a>
+						</div>
+						<div class="post-type">
+							{getPostType(item.post, profile?.handle)}
+						</div>
+					</div>
+
+					<div class="post-content-column">
+						<div class="text-content">
+							{item.post.record.text}
+						</div>
+						{#if item.post.embed?.images}
+							<div class="image-indicator">
+								<span
+									>+{item.post.embed.images.length} image{item.post.embed.images.length > 1
+										? 's'
+										: ''}</span
+								>
+							</div>
+						{/if}
+					</div>
+
+					<div class="post-metrics-column">
+						<div class="metric-group">
+							<div class="metric-label"><i class="icon fa-regular fa-thumbs-up"></i></div>
+							<div class="metric-value">{item.post.likeCount}</div>
+						</div>
+						<div class="metric-group">
+							<div class="metric-label"><i class="icon fa-regular fa-copy"></i></div>
+							<div class="metric-value">{item.post.repostCount}</div>
+						</div>
+						<div class="metric-group">
+							<div class="metric-label"><i class="icon fa-regular fa-comment"></i></div>
+							<div class="metric-value">{item.post.replyCount}</div>
+						</div>
+						<div class="metric-group">
+							<div class="metric-label"><i class="icon fa-regular fa-comments"></i></div>
+							<div class="metric-value">{item.post.quoteCount}</div>
+						</div>
+					</div>
+				</div>
+			{/each}
 		</div>
 	</section>
 {/if}
@@ -118,27 +130,67 @@
 		@apply mt-8;
 	}
 
-	.table-container {
+	/* Container styles */
+	.posts-container {
 		@apply overflow-x-auto rounded-lg border border-gray-700;
 	}
 
-	.posts-list {
-		@apply w-full border-collapse;
+	/* Header styles */
+	.posts-header {
+		@apply flex bg-gray-800 text-gray-300 border-b border-gray-700 p-3 font-medium text-sm;
 	}
 
-	.posts-list th {
-		@apply text-xs bg-gray-800 text-left p-3 text-gray-300 font-medium text-sm border-b border-gray-700;
-	}
-	th > .icon {
-		display: block;
+	.header-item {
+		@apply text-left;
 	}
 
-	.posts-list td {
-		@apply p-3 border-b border-gray-700 text-sm;
+	.header-date {
+		@apply w-1/6;
 	}
 
-	.post-text {
-		@apply max-w-md;
+	.header-content {
+		@apply w-3/6;
+	}
+
+	.header-metrics {
+		@apply w-2/6 flex flex-wrap justify-between;
+	}
+
+	.metric-item {
+		@apply text-xs flex items-center mr-2;
+	}
+
+	.metric-item .icon {
+		@apply mr-1;
+	}
+
+	/* Post row styles */
+	.post-row {
+		@apply flex p-3 border-b border-gray-700 text-sm hover:bg-gray-800/30 transition-colors;
+	}
+
+	.post-row.repost {
+		@apply text-gray-400 bg-gray-600;
+	}
+
+	.post-date-column {
+		@apply w-1/6;
+	}
+
+	.post-content-column {
+		@apply w-3/6;
+	}
+
+	.post-metrics-column {
+		@apply w-2/6 flex flex-wrap justify-between pl-2;
+	}
+
+	.post-type {
+		@apply text-xs text-gray-400 mt-1;
+	}
+
+	.post-date {
+		@apply text-xs;
 	}
 
 	.text-content {
@@ -149,11 +201,44 @@
 		@apply mt-1 text-xs text-blue-400 font-medium;
 	}
 
-	.post-item.repost td.post-metric {
-		@apply text-gray-400;
+	.metric-group {
+		@apply flex flex-col items-center mb-1 mr-2;
 	}
 
-	.post-date {
-		@apply text-xs;
+	.metric-label {
+		@apply text-xs text-gray-400;
+	}
+
+	.metric-value {
+		@apply text-xs font-medium;
+	}
+
+	/* Mobile responsiveness */
+	@media (max-width: 640px) {
+		.posts-header {
+			@apply hidden;
+		}
+
+		.post-row {
+			@apply flex-col p-4 mb-3;
+		}
+
+		.post-date-column,
+		.post-content-column,
+		.post-metrics-column {
+			@apply w-full mb-3;
+		}
+
+		.post-metrics-column {
+			@apply grid grid-cols-4 gap-2;
+		}
+
+		.metric-group {
+			@apply flex-row items-center;
+		}
+
+		.metric-label {
+			@apply mr-2;
+		}
 	}
 </style>
