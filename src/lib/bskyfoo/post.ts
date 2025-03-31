@@ -1,6 +1,15 @@
 import { API_HOST, handleApiError } from './core';
 
 /**
+ * Helper function to create a delay/pause
+ * @param ms - The number of milliseconds to delay
+ * @returns A promise that resolves after the specified delay
+ */
+function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
  * Represents a Bluesky post author
  */
 export interface BlueskyAuthor {
@@ -114,13 +123,11 @@ export interface BlueskyAuthorFeedResponse {
 /**
  * Get posts from a user's feed
  * @param handle - The user's handle
- * @param limit - Maximum number of posts to return (default: 20)
  * @param cursor - Pagination cursor for fetching more posts
  * @returns Promise that resolves to the feed response
  */
 export async function getUserPosts(
 	handle: string,
-	limit: number = 100,
 	cursor?: string
 ): Promise<BlueskyAuthorFeedResponse> {
 	if (!handle) {
@@ -128,11 +135,11 @@ export async function getUserPosts(
 	}
 
 	try {
-		let url = `${API_HOST}/xrpc/app.bsky.feed.getAuthorFeed?actor=${handle}&limit=${limit}`;
+		let url = `${API_HOST}/xrpc/app.bsky.feed.getAuthorFeed?actor=${handle}&limit=100`;
 		if (cursor) {
 			url += `&cursor=${encodeURIComponent(cursor)}`;
 		}
-
+		console.log(`the url ${url}`)
 		const response = await fetch(url);
 
 		if (!response.ok) {
@@ -144,5 +151,79 @@ export async function getUserPosts(
 	} catch (error) {
 		handleApiError(error, `fetching posts for ${handle}`);
 		return { feed: [] }; // TypeScript requires this even though handleApiError throws
+	}
+}
+
+/**
+ * Get multiple batches of posts from a user's feed
+ * @param handle - The user's handle
+ * @param batchCount - Number of batches to fetch (default: 1)
+ * @param onProgress - Optional callback for reporting progress (batch number, total batches, and posts count)
+ * @returns Promise that resolves to a combined feed response with all fetched posts
+ */
+export async function getBatchUserPosts(
+	handle: string,
+	batchCount: number = 1,
+	onProgress?: (current: number, total: number, postsCount: number) => void
+): Promise<BlueskyAuthorFeedResponse> {
+	if (!handle) {
+		return { feed: [] };
+	}
+
+	try {
+		const allPosts: BlueskyFeedItem[] = [];
+		let currentCursor: string | undefined = undefined;
+
+		// Fetch posts in batches
+		for (let i = 0; i < batchCount; i++) {
+			// Report progress if callback is provided
+			if (onProgress) {
+				onProgress(i + 1, batchCount, allPosts.length);
+			}
+
+			// First request shouldn't have a cursor
+			// Log cursor for debugging
+			console.log(`Batch ${i + 1} of ${batchCount}: Using cursor: ${i === 0 ? 'undefined' : currentCursor}`);
+
+			// Add a 0.3 second delay before each API call (except the first one)
+			if (i > 0) {
+				await delay(300); // 300ms = 0.3 seconds
+			}
+
+			const result = await getUserPosts(handle, i === 0 ? undefined : currentCursor);
+
+			// Add posts to our collection
+			if (result.feed && result.feed.length > 0) {
+				allPosts.push(...result.feed);
+				console.log(`Retrieved ${result.feed.length} posts, total now: ${allPosts.length}`);
+			} else {
+				console.log('No posts in this batch, stopping');
+				break;
+			}
+
+			// Update cursor for next batch
+			currentCursor = result.cursor;
+			console.log(`Next cursor will be: ${currentCursor}`);
+
+			// If no cursor is returned, we've reached the end of available posts
+			if (!currentCursor) {
+				console.log('No cursor returned, stopping');
+				break;
+			}
+		}
+
+		if (onProgress) {
+			onProgress(batchCount, batchCount, allPosts.length);
+		}
+
+		// Return combined result with the last cursor (if available)
+		return {
+			feed: allPosts,
+			cursor: currentCursor
+		};
+	} catch (error) {
+		console.error('Error in getBatchUserPosts:', error);
+		handleApiError(error, `fetching batch posts for ${handle}`);
+		return { feed: [] };
 	}
 }

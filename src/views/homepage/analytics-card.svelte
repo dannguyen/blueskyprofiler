@@ -67,6 +67,8 @@
 				totalPosts: posts.length,
 				originalPostCount: 0,
 				postsPerDay: 0,
+				postsInLast12Hours: 0,
+				postsInLastHour: 0,
 				postTypes: { reply: 0, images: 0, video: 0, quote: 0, post: 0, repost: posts.length },
 				postMediaTypes: {},
 				engagement: {
@@ -89,6 +91,16 @@
 		// Calculate date range in days
 		const dateRangeMs = latestDate.getTime() - earliestDate.getTime();
 		const dateRangeDays = Math.max(1, dateRangeMs / (1000 * 60 * 60 * 24));
+		
+		// Calculate posts in last 12 hours and last hour
+		const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
+		const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+		const postsInLast12Hours = originalPosts.filter(item => 
+			new Date(item.post.record.createdAt) >= twelveHoursAgo
+		).length;
+		const postsInLastHour = originalPosts.filter(item => 
+			new Date(item.post.record.createdAt) >= oneHourAgo
+		).length;
 
 		// Count post types
 		const postTypes = {
@@ -156,6 +168,8 @@
 			originalPostCount: originalPosts.length,
 			regularPostCount: regularPosts.length,
 			postsPerDay: +(originalPosts.length / dateRangeDays).toFixed(1),
+			postsInLast12Hours,
+			postsInLastHour,
 			postTypes,
 			postMediaTypes,
 			engagement: {
@@ -218,6 +232,14 @@
 					<div class="analytics-stat">
 						<span class="analytics-label">Recent posts/day rate:</span>
 						<span class="analytics-value">{analytics.postsPerDay}</span>
+					</div>
+					<div class="analytics-stat">
+						<span class="analytics-label">Posts in last 12 hours:</span>
+						<span class="analytics-value">{analytics.postsInLast12Hours}</span>
+					</div>
+					<div class="analytics-stat">
+						<span class="analytics-label">Posts in last hour:</span>
+						<span class="analytics-value">{analytics.postsInLastHour}</span>
 					</div>
 
 					<div class="analytics-subsection">

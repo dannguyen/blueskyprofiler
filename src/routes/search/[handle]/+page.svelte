@@ -4,7 +4,7 @@
 	import { resolveRoute } from '$app/paths';
 	import {
 		getProfile,
-		getUserPosts,
+		getBatchUserPosts,
 		type BlueskyProfile,
 		type BlueskyFeedItem
 	} from '$lib/bskyfoo';
@@ -13,6 +13,7 @@
 	import AnalyticsCard from '../../../views/homepage/analytics-card.svelte';
 	import PostsSpotlight from '../../../views/homepage/posts-spotlight.svelte';
 	import PostsList from '../../../views/homepage/posts-list.svelte';
+	import HourlyPostsChart from '../../../views/homepage/hourly-posts-chart.svelte';
 
 	export let data;
 
@@ -22,6 +23,10 @@
 	let posts: BlueskyFeedItem[] = [];
 	let isLoading = true;
 	let error: string | null = null;
+	let batchIterations: number = 2;
+
+	// Progress tracking
+	let fetchProgress = { current: 0, total: batchIterations, posts: 0 };
 
 	async function fetchData() {
 		if (!handle) return;
@@ -37,9 +42,19 @@
 			profile = await getProfile(handle);
 
 			if (profile) {
-				// Step 2: Fetch the user's posts (100 instead of 25)
-				searchMessage = `Fetching posts for ${handle}...`;
-				const postsResponse = await getUserPosts(handle, 100);
+				// Step 2: Fetch the user's posts in batches
+				searchMessage = `Fetching posts for ${handle}... (Batch 0 of ${batchIterations})`;
+
+				// Reset progress tracking
+				fetchProgress = { current: 0, total: batchIterations, posts: 0 };
+
+				// Progress callback to update the loading message
+				const updateProgress = (current: number, total: number, postsCount: number) => {
+					fetchProgress = { current, total, posts: postsCount };
+					searchMessage = `Fetching posts for ${handle}... (Batch ${current} of ${total}, ${postsCount} posts so far)`;
+				};
+
+				const postsResponse = await getBatchUserPosts(handle, batchIterations, updateProgress);
 				posts = postsResponse.feed;
 			}
 
@@ -72,6 +87,12 @@
 
 		{#if searchMessage}
 			<p class="search-message">{searchMessage}</p>
+
+			{#if fetchProgress.current > 0}
+				<div class="progress-container">
+					<div class="progress-bar" style="width: {(fetchProgress.current / fetchProgress.total) * 100}%"></div>
+				</div>
+			{/if}
 		{/if}
 
 		{#if error}
@@ -83,6 +104,12 @@
 		{#if profile}
 			<ProfileCard {profile} />
 			<AnalyticsCard {posts} {profile} />
+
+			<!-- Posts per hour bar chart -->
+			{#if posts.length > 0}
+				<HourlyPostsChart {posts} />
+			{/if}
+
 			<PostsSpotlight {posts} {profile} />
 			<PostsList {posts} {profile} />
 		{/if}
@@ -117,5 +144,13 @@
 
 	.error-message {
 		@apply mt-4 p-3 bg-red-900/50 border border-red-700 rounded-md text-red-200;
+	}
+
+	.progress-container {
+		@apply w-full h-2 bg-gray-700 rounded-full mt-2 overflow-hidden;
+	}
+
+	.progress-bar {
+		@apply h-full bg-blue-500 transition-all duration-300 ease-out;
 	}
 </style>
