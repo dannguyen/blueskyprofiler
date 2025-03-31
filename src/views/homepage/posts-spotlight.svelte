@@ -3,25 +3,12 @@
 		type BlueskyProfile,
 		type BlueskyFeedItem,
 		type BlueskyPost,
-		getPostType,
 		postURL
 	} from '$lib/bskyfoo';
 	import { formatDate, prettifyInteger } from '$lib/utils';
 
 	export let posts: BlueskyFeedItem[] = [];
 	export let profile: BlueskyProfile | null = null;
-
-	/**
-	 * Get total engagement count for a post
-	 */
-	function getTotalInteractions(post: BlueskyPost): number {
-		return (
-			(post.likeCount || 0) +
-			(post.repostCount || 0) +
-			(post.replyCount || 0) +
-			(post.quoteCount || 0)
-		);
-	}
 
 	/**
 	 * Returns the top 5 posts with highest engagement metrics
@@ -32,30 +19,18 @@
 		if (!posts || posts.length === 0) return [];
 
 		// Filter out reposts for posting activity summary since they don't have repost timestamps
-		const originalPosts = posts.filter(
-			(item) => getPostType(item.post, profile?.handle) !== 'repost'
-		);
+		const originalPosts = posts.filter((item) => item.post.thingType !== 'repost');
 
 		// Handle edge case where there are no original posts (only reposts)
 		if (originalPosts.length === 0) {
 			return [];
 		}
 
-		// Calculate total engagement for each post
-		const postsWithEngagement = originalPosts.map((item) => {
-			const totalEngagement = getTotalInteractions(item.post);
-
-			return {
-				post: item.post,
-				totalEngagement
-			};
-		});
-
 		// Sort by total engagement in descending order
-		postsWithEngagement.sort((a, b) => b.totalEngagement - a.totalEngagement);
+		originalPosts.sort((a, b) => b.post.interactions - a.post.interactions);
 
 		// Return top n posts (or fewer if there aren't n posts)
-		return postsWithEngagement.slice(0, 5).map((item) => item.post);
+		return originalPosts.slice(0, 5).map((item) => item.post);
 	}
 
 	/**
@@ -113,7 +88,7 @@
 							<div class="post-header-right">
 								<div class="total-engagement" title="Total Interactions">
 									<span class="total-label">Interactions</span>
-									<span class="total-value">{getTotalInteractions(post)}</span>
+									<span class="total-value">{post.interactions}</span>
 								</div>
 							</div>
 						</div>
@@ -165,59 +140,34 @@
 	}
 
 	.newspaper-grid {
+		/*
 		@apply grid gap-4 mt-4;
-		/* 8-column grid layout with special allocations */
 		grid-template-columns: repeat(12, 1fr);
 		grid-auto-rows: minmax(min-content, max-content);
 
 		@media (max-width: 768px) {
 			grid-template-columns: 1fr;
 		}
+		*/
 	}
 
-	/* Post card positioning based on index */
-	.post-card:nth-child(1) {
-		/* Featured post: 5/8 of the grid width */
-		@apply bg-blue-900/30;
-		grid-column: span 7;
+	.post-card {
+		/* @apply bg-blue-900/30; */
+
+		/* grid-column: span 7;
 
 		@media (max-width: 900px) {
-			grid-column: span 6;
+			grid-column: span 1;
 		}
 
 		@media (max-width: 768px) {
 			grid-column: span 1;
-		}
-	}
-
-	.post-card:nth-child(2) {
-		/* Second post: 3/8 of the grid width */
-		grid-column: span 5;
-		@media (max-width: 900px) {
-			grid-column: span 6;
-		}
-
-		@media (max-width: 768px) {
-			grid-column: span 1;
-		}
-	}
-
-	.post-card:nth-child(n + 3) {
-		/* Remaining posts: each take 4/12 (1/3) of the grid width */
-		grid-column: span 4;
-
-		@media (max-width: 1200px) {
-			grid-column: span 6;
-		}
-
-		@media (max-width: 768px) {
-			grid-column: span 1;
-		}
+		} */
 	}
 
 	.post-card {
 		@apply bg-gray-700/50 rounded-lg p-4 border border-gray-600
-               flex flex-col transition-all duration-300;
+               flex flex-col transition-all duration-300 mb-8 p-4;
 		height: fit-content;
 	}
 

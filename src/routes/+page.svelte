@@ -14,7 +14,7 @@
 		const processedHandle = cleanHandleInput(handle);
 
 		// Navigate to the search page with the processed handle
-		goto(resolveRoute(`/search/${processedHandle}`));
+		goto(resolveRoute(`/profile/${processedHandle}`));
 	}
 </script>
 
@@ -40,7 +40,7 @@
 					class="input-field"
 					disabled={isLoading}
 				/>
-				<button type="submit" class="search-button" disabled={isLoading}> Search </button>
+				<button type="submit" class="search-button" disabled={isLoading}> Get Profile </button>
 			</div>
 		</form>
 
@@ -48,10 +48,10 @@
 			<p class="example-title">Examples:</p>
 			<ul class="example-list">
 				<li>
-					<a href="/search/jamesgunn.bsky.social" class="example-link">jamesgunn.bsky.social</a>
+					<a href="/profile/jamesgunn.bsky.social" class="example-link">jamesgunn.bsky.social</a>
 				</li>
-				<li><a href="/search/theonion.com" class="example-link">theonion.com</a></li>
-				<li><a href="/search/jay.bsky.team" class="example-link">jay.bsky.team</a></li>
+				<li><a href="/profile/theonion.com" class="example-link">theonion.com</a></li>
+				<li><a href="/profile/jay.bsky.team" class="example-link">jay.bsky.team</a></li>
 			</ul>
 		</div>
 	</div>

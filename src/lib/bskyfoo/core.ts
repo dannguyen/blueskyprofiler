@@ -17,31 +17,6 @@ export function handleApiError(error: unknown, context: string): never {
 import type { BlueskyPost } from './post';
 
 /**
- * Determine post type based on its structure and content
- * @param post - The BlueskyPost to analyze
- * @param profileHandle - Optional profile handle to check if post is a repost
- * @returns A string representing the post type ('repost', 'reply', 'quote', or 'post')
- */
-export function getPostType(post: BlueskyPost, profileHandle?: string): string {
-	// Check if it's a repost (author handle is different from profile handle)
-	if (profileHandle && post.author.handle !== profileHandle) {
-		return 'repost';
-	}
-	// Check if it's a reply
-	else if (post.record.reply) {
-		return 'reply';
-	}
-	// Check if it has video
-	else if (post.embed?.$type?.includes('app.bsky.embed.record')) {
-		return 'quote';
-	}
-	// Default type is a text post
-	else {
-		return 'post';
-	}
-}
-
-/**
  * Determine the media type of a post
  * @param post - The BlueskyPost to analyze
  * @returns A string representing the media type ('image', 'video', or 'text')

@@ -1,28 +1,22 @@
 <script lang="ts">
-	import {
-		type BlueskyProfile,
-		type BlueskyFeedItem,
-		type BlueskyPost,
-		getPostType,
-		postURL
-	} from '$lib/bskyfoo';
+	import { type BlueskyProfile, type BlueskyFeedItem, postURL } from '$lib/bskyfoo';
 	import { formatDate, formatIsoDate, prettifyInteger } from '$lib/utils';
 	export let posts: BlueskyFeedItem[] = [];
 	export let profile: BlueskyProfile | null = null;
 
 	import FilterSelect from './select-filters.svelte';
 
-	let POST_TYPES = [
-		{ value: 'post', label: 'Posts', count: 0 },
-		{ value: 'repost', label: 'Reposts', count: 0 },
-		{ value: 'quote', label: 'Quotes', count: 0 },
-		{ value: 'reply', label: 'Replies', count: 0 }
-	];
+	function tallyPostTypesForFilterLabel(posts) {
+		const POST_TYPES = [
+			{ value: 'post', label: 'Posts', count: 0 },
+			{ value: 'repost', label: 'Reposts', count: 0 },
+			{ value: 'quote', label: 'Quotes', count: 0 },
+			{ value: 'reply', label: 'Replies', count: 0 }
+		];
 
-	function tallyPostTypesForFilterLabel(posts, POST_TYPES) {
 		// yikes this is ugly!
 		posts.forEach((item) => {
-			const pType = getPostType(item.post, profile?.handle);
+			const pType = item.post.thingType;
 			// Increment post type counter
 			let metaobj = POST_TYPES.find((o) => o.value === pType);
 			if (metaobj) {
@@ -41,15 +35,15 @@
 	}
 	// Filter posts based on the selected type
 	$: filteredPosts = posts.filter((item) => {
-		const postType = getPostType(item.post, profile?.handle);
+		const postType = item.post.thingType;
 		return selectedPostType === 'all' || postType === selectedPostType;
 	});
 </script>
 
 {#if posts.length > 0}
-	{@const tallied_post_types = tallyPostTypesForFilterLabel(posts, POST_TYPES)}
+	{@const tallied_post_types = tallyPostTypesForFilterLabel(posts)}
 	<section class="posts-list section">
-		<h2 class="section-title">Recent Posting Activity</h2>
+		<h2 class="section-title">Most Recent {posts.length} Posts</h2>
 
 		<div class="filters">
 			<FilterSelect
@@ -64,6 +58,8 @@
 				<div class="header-item header-date">Date</div>
 				<div class="header-item header-content">Content</div>
 				<div class="header-item header-metrics">
+					<div class="metric-item"><i class="icon fa-regular fa-bell"></i> Interactions</div>
+
 					<div class="metric-item"><i class="icon fa-regular fa-thumbs-up"></i> Likes</div>
 					<div class="metric-item"><i class="icon fa-regular fa-copy"></i> Reposts</div>
 					<div class="metric-item"><i class="icon fa-regular fa-comment"></i> Replies</div>
@@ -72,19 +68,27 @@
 			</div>
 
 			{#each filteredPosts as item}
-				<div class="post-row {getPostType(item.post, profile?.handle)}">
+				<div class="post-row {item.post.thingType}">
 					<div class="post-date-column">
 						<div class="post-date">
 							<a href={postURL(item.post)} target="_blank" class="link">
-								{formatIsoDate(item.post.record.createdAt)}
+								{formatIsoDate(item.post.thingCreatedAt)}
 							</a>
-						</div>
-						<div class="post-type">
-							{getPostType(item.post, profile?.handle)}
 						</div>
 					</div>
 
 					<div class="post-content-column">
+						<div class="post-type">
+							{item.post.thingType}
+							{#if ['reply', 'repost', 'quote'].includes(item.post.thingType) && item.post.interactedUser}
+								<a
+									class="interacted-user"
+									href="https://bsky.app/profile/{item.post.interactedUser.handle}"
+									>@{item.post.interactedUser.handle}</a
+								>
+							{/if}
+						</div>
+
 						<div class="text-content">
 							{item.post.record.text}
 						</div>
@@ -100,6 +104,11 @@
 					</div>
 
 					<div class="post-metrics-column">
+						<div class="metric-group">
+							<div class="metric-label"><i class="icon fa-regular fa-bell"></i></div>
+							<div class="metric-value">{item.post.interactions}</div>
+						</div>
+
 						<div class="metric-group">
 							<div class="metric-label"><i class="icon fa-regular fa-thumbs-up"></i></div>
 							<div class="metric-value">{item.post.likeCount}</div>
@@ -145,15 +154,15 @@
 	}
 
 	.header-date {
-		@apply w-1/6;
+		@apply w-1/9;
 	}
 
 	.header-content {
-		@apply w-3/6;
+		@apply w-4/9;
 	}
 
 	.header-metrics {
-		@apply w-2/6 flex flex-wrap justify-between;
+		@apply w-4/9 flex flex-wrap justify-between;
 	}
 
 	.metric-item {
@@ -174,19 +183,19 @@
 	}
 
 	.post-date-column {
-		@apply w-1/6;
+		@apply w-1/9;
 	}
 
 	.post-content-column {
-		@apply w-3/6;
+		@apply w-4/9;
 	}
 
 	.post-metrics-column {
-		@apply w-2/6 flex flex-wrap justify-between pl-2;
+		@apply w-4/9 flex flex-wrap justify-between pl-2;
 	}
 
 	.post-type {
-		@apply text-xs text-gray-400 mt-1;
+		@apply text-xs text-gray-400 mb-0;
 	}
 
 	.post-date {
@@ -240,5 +249,9 @@
 		.metric-label {
 			@apply mr-2;
 		}
+	}
+
+	.interacted-user {
+		@apply text-blue-400;
 	}
 </style>

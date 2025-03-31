@@ -3,11 +3,12 @@
 		type BlueskyProfile,
 		type BlueskyFeedItem,
 		type BlueskyPost,
-		getPostType,
 		getPostMediaType,
 		extractPostLink
 	} from '$lib/bskyfoo';
 	import { formatDate } from '$lib/utils';
+	import HourlyPostsChart from '../../views/homepage/posts-chart-hourly.svelte';
+	import WeekdayPostsChart from '../../views/homepage/posts-chart-weekday.svelte';
 
 	/**
 	 * Process the posts array and count the frequency of domains from external links
@@ -43,23 +44,62 @@
 		return result;
 	}
 
+	/**
+	 * Process the posts array and count the frequency of domains from external links
+	 * @param posts - Array of BlueskyFeedItems to analyze
+	 * @returns Array of objects with domain and count, sorted by count in descending order
+	 */
+	function getInteractedUsers(posts: BlueskyFeedItem[]): Array<{ domain: string; count: number }> {
+		// Create a map to store domain counts
+		const handleMap = new Map<string, number>();
+
+		// Process each post
+		posts.forEach((item) => {
+			// Extract link information from the post
+			const userInfo = item.post.interactedUser;
+
+			// If a domain was found and isn't empty
+			if (userInfo && userInfo.handle) {
+				// Increment the count for this domain
+				const currentCount = handleMap.get(userInfo.handle) || 0;
+				handleMap.set(userInfo.handle, currentCount + 1);
+			}
+		});
+
+		// Convert the map to an array of objects
+		const result = Array.from(handleMap.entries()).map(([handle, count]) => ({
+			handle,
+			count
+		}));
+
+		// Sort by count in descending order
+		result.sort((a, b) => b.count - a.count);
+
+		return result;
+	}
+
 	export let posts: BlueskyFeedItem[] = [];
 	export let profile: BlueskyProfile | null = null;
+
+	// For limiting displayed linked domains
+	let showAllDomains = false;
+	let showAllInteractions = false;
+	const DOMAIN_DISPLAY_LIMIT = 10;
 
 	function calculatePostAnalytics(posts: BlueskyFeedItem[]) {
 		// Default values
 		if (!posts.length) return null;
 
 		// Filter out reposts for posting activity summary since they don't have repost timestamps
-		const originalPosts = posts.filter(
-			(item) => getPostType(item.post, profile?.handle) !== 'repost'
-		);
+		const originalPosts = posts.filter((item) => item.post.isOriginal());
+		const reposts = posts.filter((item) => item.post.thingType == 'repost');
 
 		const regularPosts = originalPosts.filter(
-			(item) => !['quote', 'reply'].includes(getPostType(item.post, profile?.handle))
+			(item) => !['quote', 'reply'].includes(item.post.thingType)
 		);
 
 		const linkedDomains = getDomainFrequency(posts);
+		const interactedUsers = getInteractedUsers(posts);
 
 		// Handle edge case where there are no original posts (only reposts)
 		if (originalPosts.length === 0) {
@@ -67,7 +107,9 @@
 				totalPosts: posts.length,
 				originalPostCount: 0,
 				postsPerDay: 0,
+				repostsPerDay: 0,
 				postsInLast12Hours: 0,
+				postsInLast24Hours: 0,
 				postsInLastHour: 0,
 				postTypes: { reply: 0, images: 0, video: 0, quote: 0, post: 0, repost: posts.length },
 				postMediaTypes: {},
@@ -79,27 +121,33 @@
 				},
 				dateRange: { earliest: new Date(), latest: new Date(), days: 0 },
 				media: { totalImages: 0, imagesWithAlt: 0, altTextPercentage: 0 },
-				linkedDomains: {}
+				linkedDomains: {},
+				interactedUsers: {}
 			};
 		}
 
 		// Get earliest and latest post dates from original content only
-		const postDates = originalPosts.map((item) => new Date(item.post.record.createdAt).getTime());
+		const postDates = posts.map((item) => new Date(item.post.thingCreatedAt).getTime());
 		const earliestDate = new Date(Math.min(...postDates));
 		const latestDate = new Date(Math.max(...postDates));
 
 		// Calculate date range in days
 		const dateRangeMs = latestDate.getTime() - earliestDate.getTime();
-		const dateRangeDays = Math.max(1, dateRangeMs / (1000 * 60 * 60 * 24));
-		
+		const dateRangeDays = dateRangeMs / (1000.0 * 60 * 60 * 24);
+
 		// Calculate posts in last 12 hours and last hour
+		const _24HoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 		const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
 		const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-		const postsInLast12Hours = originalPosts.filter(item => 
-			new Date(item.post.record.createdAt) >= twelveHoursAgo
+
+		const postsInLast24Hours = originalPosts.filter(
+			(item) => new Date(item.post.record.createdAt) >= _24HoursAgo
 		).length;
-		const postsInLastHour = originalPosts.filter(item => 
-			new Date(item.post.record.createdAt) >= oneHourAgo
+		const postsInLast12Hours = originalPosts.filter(
+			(item) => new Date(item.post.record.createdAt) >= twelveHoursAgo
+		).length;
+		const postsInLastHour = originalPosts.filter(
+			(item) => new Date(item.post.record.createdAt) >= oneHourAgo
 		).length;
 
 		// Count post types
@@ -129,17 +177,16 @@
 		// Analyze each post
 		posts.forEach((item) => {
 			// Increment post type counter
-			const type = getPostType(item.post, profile?.handle);
-			postTypes[type as keyof typeof postTypes]++;
+			postTypes[item.post.thingType as keyof typeof postTypes]++;
 
 			const mType = getPostMediaType(item.post);
-			if (type != 'repost') {
+			if (item.post.isOriginal()) {
 				// i.e. an original post
 				postMediaTypes[mType as keyof typeof postMediaTypes]++;
 			}
 
 			// Add engagement metrics (exclude reposts as they don't represent engagement for the user)
-			if (type !== 'repost') {
+			if (item.post.isOriginal()) {
 				totalReplies += item.post.replyCount || 0;
 				totalLikes += item.post.likeCount || 0;
 				totalReposts += item.post.repostCount || 0;
@@ -147,7 +194,7 @@
 			}
 
 			// Count images and check for alt text
-			if (type !== 'repost' && item.post.embed?.images) {
+			if (item.post.isOriginal() && item.post.embed?.images) {
 				const imageArray = item.post.embed.images;
 				totalImages += imageArray.length;
 
@@ -168,7 +215,9 @@
 			originalPostCount: originalPosts.length,
 			regularPostCount: regularPosts.length,
 			postsPerDay: +(originalPosts.length / dateRangeDays).toFixed(1),
+			repostsPerDay: +(reposts.length / dateRangeDays).toFixed(1),
 			postsInLast12Hours,
+			postsInLast24Hours,
 			postsInLastHour,
 			postTypes,
 			postMediaTypes,
@@ -193,14 +242,15 @@
 			dateRange: {
 				earliest: earliestDate,
 				latest: latestDate,
-				days: Math.round(dateRangeDays)
+				days: dateRangeDays.toFixed(1)
 			},
 			media: {
 				totalImages,
 				imagesWithAlt,
 				altTextPercentage
 			},
-			linkedDomains
+			linkedDomains,
+			interactedUsers
 		};
 	}
 </script>
@@ -218,32 +268,43 @@
 
 			<div class="analytics-grid">
 				<div class="analytics-section">
-					<h4 class="analytics-section-title">Recent Activity</h4>
+					<h4 class="analytics-section-title">Recent Activity Rates</h4>
 					<div class="analytics-stat">
 						<span class="analytics-label">Date range:</span>
 						<span class="analytics-value">{analytics.dateRange.days} days</span>
 					</div>
 					<div class="analytics-stat">
-						<span class="analytics-label">Latest post:</span>
+						<span class="analytics-label">Date of latest post:</span>
 						<span class="analytics-value"
 							>{formatDate(analytics.dateRange.latest.toISOString())}</span
 						>
 					</div>
+
+					<div class="analytics-stat">
+						<span class="analytics-label">Posts in past hour:</span>
+						<span class="analytics-value">{analytics.postsInLastHour}</span>
+					</div>
+					<div class="analytics-stat">
+						<span class="analytics-label">Posts in past 12 hours:</span>
+						<span class="analytics-value">{analytics.postsInLast12Hours}</span>
+					</div>
+					<div class="analytics-stat">
+						<span class="analytics-label">Posts in past 24 hours:</span>
+						<span class="analytics-value">{analytics.postsInLast24Hours}</span>
+					</div>
+
 					<div class="analytics-stat">
 						<span class="analytics-label">Recent posts/day rate:</span>
 						<span class="analytics-value">{analytics.postsPerDay}</span>
 					</div>
+
 					<div class="analytics-stat">
-						<span class="analytics-label">Posts in last 12 hours:</span>
-						<span class="analytics-value">{analytics.postsInLast12Hours}</span>
-					</div>
-					<div class="analytics-stat">
-						<span class="analytics-label">Posts in last hour:</span>
-						<span class="analytics-value">{analytics.postsInLastHour}</span>
+						<span class="analytics-label">Recent reposts/day rate:</span>
+						<span class="analytics-value">{analytics.repostsPerDay}</span>
 					</div>
 
 					<div class="analytics-subsection">
-						<h4 class="analytics-section-title">Engagement (Per Post)</h4>
+						<h4 class="analytics-section-title">Engagement (Per Recent Post)</h4>
 						<div class="analytics-stat">
 							<span class="analytics-label">Likes per post:</span>
 							<span class="analytics-value">{analytics.engagement.likes.average}</span>
@@ -262,7 +323,7 @@
 						</div>
 					</div>
 					<div class="analytics-subsection">
-						<h4 class="analytics-section-title">Engagement (Total)</h4>
+						<h4 class="analytics-section-title">Engagement (Recent Total)</h4>
 						<div class="analytics-stat">
 							<span class="analytics-label">Likes:</span>
 							<span class="analytics-value"
@@ -373,13 +434,93 @@
 				</div>
 
 				<div class="analytics-section linking-activity">
-					<h4 class="analytics-section-title">Domains Linked</h4>
-					<ul class="domains-list">
-						{#each analytics.linkedDomains as item}
-							<li>{item.domain} ({item.count})</li>
-						{/each}
-					</ul>
+					<div class="analytics-subsection">
+						<h4 class="analytics-section-title">Users Interacted</h4>
+						<ul class="domains-list">
+							{#if analytics.interactedUsers.length > 0}
+								{#each showAllInteractions ? analytics.interactedUsers : analytics.interactedUsers.slice(0, DOMAIN_DISPLAY_LIMIT) as item}
+									<li>
+										{item.count}:
+
+										<a class="interacted-user" href="https://bsky.app/profile/{item.handle}"
+											>@{item.handle}</a
+										>
+									</li>
+								{/each}
+
+								{#if analytics.interactedUsers.length > DOMAIN_DISPLAY_LIMIT}
+									<li class="show-more">
+										<button
+											on:click={() => (showAllInteractions = !showAllInteractions)}
+											class="show-more-btn"
+										>
+											{showAllInteractions
+												? `Show fewer`
+												: `Show all (${analytics.interactedUsers.length})`}
+										</button>
+									</li>
+								{/if}
+							{:else}
+								<li class="no-domains">No interacted users found</li>
+							{/if}
+						</ul>
+					</div>
+
+					<div class="analytics-subsection">
+						<h4 class="analytics-section-title">Domains Linked</h4>
+						<ul class="domains-list">
+							{#if analytics.linkedDomains.length > 0}
+								{#each showAllDomains ? analytics.linkedDomains : analytics.linkedDomains.slice(0, DOMAIN_DISPLAY_LIMIT) as item}
+									<li>
+										{item.count}:
+
+										<a class="domain-linked" href="https://{item.domain}">{item.domain}</a>
+									</li>
+								{/each}
+
+								{#if analytics.linkedDomains.length > DOMAIN_DISPLAY_LIMIT}
+									<li class="show-more">
+										<button
+											on:click={() => (showAllDomains = !showAllDomains)}
+											class="show-more-btn"
+										>
+											{showAllDomains
+												? `Show less (${DOMAIN_DISPLAY_LIMIT} of ${analytics.linkedDomains.length})`
+												: `Show all (${analytics.linkedDomains.length})`}
+										</button>
+									</li>
+								{/if}
+							{:else}
+								<li class="no-domains">No linked domains found</li>
+							{/if}
+						</ul>
+					</div>
 				</div>
+			</div>
+
+			<div class="analytics-section">
+				<!-- Charts section - responsive layout -->
+				<h2 class="analytics-section-title">
+					Posting Frequency (last {analytics.dateRange.days} days)
+				</h2>
+				<div class="note">
+					Dates and times are relative to the web browser's timezone, <strong>not</strong> the profiled
+					user's timezone.
+				</div>
+
+				{#if posts.length > 0}
+					<div class="charts-container">
+						<div class="chart-wrapper weekday-chart">
+							<h4 class="analytics-section-title">Posts by Weekday</h4>
+							<WeekdayPostsChart {posts} />
+						</div>
+
+						<div class="chart-wrapper hourly-chart">
+							<h4 class="analytics-section-title">Posts by Hour</h4>
+							<HourlyPostsChart {posts} />
+						</div>
+					</div>
+				{/if}
 			</div>
 		</section>
 	{/if}
@@ -404,7 +545,7 @@
 		}
 	}
 	.analytics-section-title {
-		@apply text-sm text-gray-300 font-medium mb-2 border-b border-gray-700 pb-1;
+		@apply text-lg text-gray-300 font-medium mb-2 border-b border-gray-700 pb-1;
 	}
 
 	.analytics-stat {
@@ -417,9 +558,55 @@
 
 	.analytics-value {
 		@apply text-white font-medium sm:mt-0 mt-1;
+		text-align: right;
+	}
+
+	.domain-linked {
+		@apply text-blue-400;
+	}
+	.interacted-user {
+		@apply text-blue-400;
 	}
 
 	.domains-list li {
 		@apply text-sm text-gray-400;
+	}
+
+	.show-more {
+		@apply mt-2 border-t border-gray-700 pt-2;
+	}
+
+	.show-more-btn {
+		@apply text-blue-400 hover:text-blue-300 bg-transparent border-none p-0 cursor-pointer text-left text-xs;
+	}
+
+	.note {
+		@apply text-xs;
+	}
+	.no-domains {
+		@apply text-gray-500 italic;
+	}
+
+	/* Charts layout */
+	.charts-container {
+		@apply grid grid-cols-1 gap-6;
+	}
+
+	.chart-wrapper {
+		@apply w-full;
+	}
+
+	@media (min-width: 1024px) {
+		.charts-container {
+			@apply grid-cols-5 gap-4;
+		}
+
+		.hourly-chart {
+			@apply col-span-3;
+		}
+
+		.weekday-chart {
+			@apply col-span-2;
+		}
 	}
 </style>
