@@ -147,8 +147,6 @@
 		{/if}
 
 		{#if profile}
-			<ProfileCard {profile} />
-
 			<!-- Load more posts interface -->
 			{#if searchMessage}
 				<p class="search-message">{searchMessage}</p>
@@ -165,12 +163,6 @@
 
 			{#if !isLoading && posts.length > 0}
 				<div class="load-more-container">
-					<div class="load-more-header">
-						<h3 class="load-more-title">Load More Posts</h3>
-						<div class="current-stats">
-							<span class="stats-count">{posts.length}</span> posts loaded
-						</div>
-					</div>
 					<button
 						on:click={loadMorePosts}
 						class="load-more-btn"
@@ -181,11 +173,13 @@
 						{:else if !lastCursor}
 							No More Posts Available
 						{:else}
-							Load More Posts
+							Load More Posts (<span class="stats-count">{posts.length}</span> posts loaded)
 						{/if}
 					</button>
 				</div>
 			{/if}
+
+			<ProfileCard {profile} />
 
 			<AnalyticsCard {posts} {profile} />
 

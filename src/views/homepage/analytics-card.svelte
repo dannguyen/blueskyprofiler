@@ -9,6 +9,36 @@
 	import { formatDate } from '$lib/utils';
 	import HourlyPostsChart from '../../views/homepage/posts-chart-hourly.svelte';
 	import WeekdayPostsChart from '../../views/homepage/posts-chart-weekday.svelte';
+	import { DateTime, Duration } from 'luxon';
+
+	export function toRoughHumanDuration(start: DateTime, end: DateTime): string {
+		const units = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'];
+		const duration = end.diff(start, units).toObject();
+
+		if ('seconds' in duration) {
+			duration.seconds = Math.round(duration.seconds!);
+		}
+
+		const durationList = Object.entries(duration);
+		const cleanedDurationList = [];
+		const ix = durationList.findIndex((v) => v[1] > 0);
+		const jx = ix + 1;
+
+		if (ix >= 0) {
+			cleanedDurationList.push(durationList[ix]);
+			if (jx < units.length) {
+				if (durationList[jx][1] > 0) {
+					cleanedDurationList.push(durationList[jx]);
+				}
+			}
+		} else {
+			cleanedDurationList.push(['seconds', 0]);
+		}
+
+		const cleanedDuration = Object.fromEntries(cleanedDurationList);
+
+		return Duration.fromObject(cleanedDuration).toHuman();
+	}
 
 	/**
 	 * Process the posts array and count the frequency of domains from external links
@@ -110,7 +140,7 @@
 				repostsPerDay: 0,
 				postsInLast12Hours: 0,
 				postsInLast24Hours: 0,
-				postsInLastHour: 0,
+				postsInLast4Hours: 0,
 				postTypes: { reply: 0, images: 0, video: 0, quote: 0, post: 0, repost: posts.length },
 				postMediaTypes: {},
 				engagement: {
@@ -119,10 +149,11 @@
 					reposts: { total: 0, average: 0 },
 					quotes: { total: 0, average: 0 }
 				},
-				dateRange: { earliest: new Date(), latest: new Date(), days: 0 },
+				dateRange: { earliest: new Date(), latest: new Date(), timespan: '0 seconds' },
 				media: { totalImages: 0, imagesWithAlt: 0, altTextPercentage: 0 },
 				linkedDomains: {},
-				interactedUsers: {}
+				interactedUsers: {},
+				timezone: ''
 			};
 		}
 
@@ -133,12 +164,13 @@
 
 		// Calculate date range in days
 		const dateRangeMs = latestDate.getTime() - earliestDate.getTime();
-		const dateRangeDays = dateRangeMs / (1000.0 * 60 * 60 * 24);
+		const msPerHour = 60 * 60 * 1000;
+		const dateRangeDays = dateRangeMs / (msPerHour * 24);
 
 		// Calculate posts in last 12 hours and last hour
-		const _24HoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-		const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
-		const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+		const _24HoursAgo = new Date(Date.now() - 24 * msPerHour);
+		const twelveHoursAgo = new Date(Date.now() - 12 * msPerHour);
+		const fourHoursAgo = new Date(Date.now() - 4 * msPerHour);
 
 		const postsInLast24Hours = originalPosts.filter(
 			(item) => new Date(item.post.record.createdAt) >= _24HoursAgo
@@ -146,8 +178,8 @@
 		const postsInLast12Hours = originalPosts.filter(
 			(item) => new Date(item.post.record.createdAt) >= twelveHoursAgo
 		).length;
-		const postsInLastHour = originalPosts.filter(
-			(item) => new Date(item.post.record.createdAt) >= oneHourAgo
+		const postsInLast4Hours = originalPosts.filter(
+			(item) => new Date(item.post.record.createdAt) >= fourHoursAgo
 		).length;
 
 		// Count post types
@@ -207,6 +239,7 @@
 			}
 		});
 
+		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		// Calculate alt text percentage
 		const altTextPercentage = totalImages > 0 ? Math.round((imagesWithAlt / totalImages) * 100) : 0;
 
@@ -218,7 +251,7 @@
 			repostsPerDay: +(reposts.length / dateRangeDays).toFixed(1),
 			postsInLast12Hours,
 			postsInLast24Hours,
-			postsInLastHour,
+			postsInLast4Hours,
 			postTypes,
 			postMediaTypes,
 			engagement: {
@@ -242,7 +275,10 @@
 			dateRange: {
 				earliest: earliestDate,
 				latest: latestDate,
-				days: dateRangeDays.toFixed(1)
+				timespan: toRoughHumanDuration(
+					DateTime.fromJSDate(earliestDate),
+					DateTime.fromJSDate(latestDate)
+				)
 			},
 			media: {
 				totalImages,
@@ -250,7 +286,8 @@
 				altTextPercentage
 			},
 			linkedDomains,
-			interactedUsers
+			interactedUsers,
+			timezone
 		};
 	}
 </script>
@@ -261,28 +298,52 @@
 		<section class="analytics-card section">
 			<h2 class="section-title">Analytics</h2>
 			<div class="deck">
-				Based on the most recent {analytics.totalPosts} posts ({analytics.originalPostCount} original,
-				{analytics.totalPosts - analytics.originalPostCount} reposts) from {profile?.displayName ||
-					profile?.handle}:
+				Over the past
+				<span class="highlight"> {analytics.dateRange.timespan}</span>,
+				<a class="interacted-user" href="https://bsky.app/profile/{profile?.handle}"
+					>@{profile?.handle}</a
+				>
+				made
+
+				<span class="highlight">{analytics.totalPosts} posts</span>
+
+				({analytics.originalPostCount} original,
+				{analytics.totalPosts - analytics.originalPostCount} reposts).
+			</div>
+
+			<div class="note">
+				Date/timestamps are based on the web browser's timezone: <code class="highlight"
+					>{analytics.timezone}</code
+				>
+			</div>
+
+			<div class="analytics-section">
+				{#if posts.length > 0}
+					<div class="charts-container">
+						<div class="chart-wrapper weekday-chart">
+							<WeekdayPostsChart {posts} />
+						</div>
+
+						<div class="chart-wrapper hourly-chart">
+							<HourlyPostsChart {posts} />
+						</div>
+					</div>
+				{/if}
 			</div>
 
 			<div class="analytics-grid">
 				<div class="analytics-section">
 					<h4 class="analytics-section-title">Recent Activity Rates</h4>
 					<div class="analytics-stat">
-						<span class="analytics-label">Date range:</span>
-						<span class="analytics-value">{analytics.dateRange.days} days</span>
-					</div>
-					<div class="analytics-stat">
-						<span class="analytics-label">Date of latest post:</span>
-						<span class="analytics-value"
-							>{formatDate(analytics.dateRange.latest.toISOString())}</span
-						>
+						<span class="analytics-label">Latest post:</span>
+						<span class="analytics-value">
+							{DateTime.fromJSDate(analytics.dateRange.latest).toRelative()}
+						</span>
 					</div>
 
 					<div class="analytics-stat">
-						<span class="analytics-label">Posts in past hour:</span>
-						<span class="analytics-value">{analytics.postsInLastHour}</span>
+						<span class="analytics-label">Posts in past 4 hours:</span>
+						<span class="analytics-value">{analytics.postsInLast4Hours}</span>
 					</div>
 					<div class="analytics-stat">
 						<span class="analytics-label">Posts in past 12 hours:</span>
@@ -497,31 +558,6 @@
 					</div>
 				</div>
 			</div>
-
-			<div class="analytics-section">
-				<!-- Charts section - responsive layout -->
-				<h2 class="analytics-section-title">
-					Posting Frequency (last {analytics.dateRange.days} days)
-				</h2>
-				<div class="note">
-					Dates and times are relative to the web browser's timezone, <strong>not</strong> the profiled
-					user's timezone.
-				</div>
-
-				{#if posts.length > 0}
-					<div class="charts-container">
-						<div class="chart-wrapper weekday-chart">
-							<h4 class="analytics-section-title">Posts by Weekday</h4>
-							<WeekdayPostsChart {posts} />
-						</div>
-
-						<div class="chart-wrapper hourly-chart">
-							<h4 class="analytics-section-title">Posts by Hour</h4>
-							<HourlyPostsChart {posts} />
-						</div>
-					</div>
-				{/if}
-			</div>
 		</section>
 	{/if}
 {/if}
@@ -559,6 +595,14 @@
 	.analytics-value {
 		@apply text-white font-medium sm:mt-0 mt-1;
 		text-align: right;
+	}
+
+	.deck {
+		@apply text-lg;
+	}
+
+	.highlight {
+		@apply font-bold text-yellow-400;
 	}
 
 	.domain-linked {

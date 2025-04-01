@@ -53,15 +53,8 @@
 	{#if maxCount > 0}
 		<div class="svg-chart-container">
 			<svg class="weekday-chart" viewBox="0 0 300 260" preserveAspectRatio="xMidYMid meet">
-				<!-- Legend -->
-				<rect x="50" y="10" width="14" height="14" fill={weekdayColor} rx="2" />
-				<text x="70" y="22" font-size="10" fill="#9ca3af">Weekdays</text>
-
-				<rect x="190" y="10" width="14" height="14" fill={weekendColor} rx="2" />
-				<text x="210" y="22" font-size="10" fill="#9ca3af">Weekends</text>
-
 				<!-- Y-axis line -->
-				<line x1="20" y1="40" x2="20" y2="240" stroke="#666" stroke-width="1" />
+				<line x1="20" y1="10" x2="20" y2="240" stroke="#666" stroke-width="1" />
 
 				<!-- X-axis line -->
 				<line x1="20" y1="240" x2="250" y2="240" stroke="#666" stroke-width="1" />
@@ -112,7 +105,7 @@
 						>
 					{:else}
 						<!-- Count label when no posts -->
-						<text x={barX + 9} y="195" text-anchor="middle" font-size="11" fill="#6b7280">0</text>
+						<text x={barX + 9} y="230" text-anchor="middle" font-size="11" fill="#6b7280">0</text>
 					{/if}
 				{/each}
 			</svg>

@@ -197,7 +197,6 @@ export class BlueskyThing implements BlueskyPost {
 		} else {
 			ptype = 'post';
 		}
-		console.log(`myposts ${ptype}; reply? ${item.reply}`);
 
 		return ptype;
 	}

@@ -48,10 +48,16 @@
 			<p class="example-title">Examples:</p>
 			<ul class="example-list">
 				<li>
-					<a href="/profile/jamesgunn.bsky.social" class="example-link">jamesgunn.bsky.social</a>
+					<a href={resolveRoute('/profile/jamesgunn.bsky.social')} class="example-link"
+						>jamesgunn.bsky.social</a
+					>
 				</li>
-				<li><a href="/profile/theonion.com" class="example-link">theonion.com</a></li>
-				<li><a href="/profile/jay.bsky.team" class="example-link">jay.bsky.team</a></li>
+				<li>
+					<a href={resolveRoute('/profile/theonion.com')} class="example-link">theonion.com</a>
+				</li>
+				<li>
+					<a href={resolveRoute('/profile/jay.bsky.team')} class="example-link">jay.bsky.team</a>
+				</li>
 			</ul>
 		</div>
 	</div>

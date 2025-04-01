@@ -8,7 +8,6 @@
 	import { formatDate, prettifyInteger } from '$lib/utils';
 
 	export let posts: BlueskyFeedItem[] = [];
-	export let profile: BlueskyProfile | null = null;
 
 	/**
 	 * Returns the top 5 posts with highest engagement metrics

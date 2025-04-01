@@ -61,6 +61,14 @@
 	{#if maxCount > 0}
 		<div class="svg-chart-container">
 			<svg class="hour-chart" viewBox="0 0 900 500" preserveAspectRatio="xMidYMid meet">
+				<!-- Legend -->
+				<rect x="50" y="10" width="14" height="14" fill={weekdayColor} rx="2" />
+				<text x="70" y="22" font-size="20" fill="#9ca3af">Weekdays</text>
+
+				<rect x="190" y="10" width="14" height="14" fill={weekendColor} rx="2" />
+				<text x="210" y="22" font-size="20" fill="#9ca3af">Weekends</text>
+
+				x
 				<!-- Y-axis line -->
 				<line x1="40" y1="10" x2="40" y2="450" stroke="#666" stroke-width="1" />
 
@@ -73,7 +81,7 @@
 						<!-- we are doing 2 hour intervals -->
 						{@const barWidth = 40}
 						{@const maxBarHeight = 450}
-						{@const maxBarHeightBuffered = maxBarHeight - 50}
+						{@const maxBarHeightBuffered = maxBarHeight - 70}
 						{@const weekdayCount = weekdayCounts[hour]}
 						{@const weekendCount = weekendCounts[hour]}
 
@@ -133,6 +141,14 @@
 								font-size="20"
 								fill="#93c5fd">{totalCount}</text
 							>
+						{:else}
+							<text
+								x={barX + barWidth / 2}
+								y={maxBarHeight - 10}
+								text-anchor="middle"
+								font-size="20"
+								fill="#6b7280">0</text
+							>
 						{/if}
 
 						<!-- Hour label -->
@@ -140,7 +156,7 @@
 							x={barX + barWidth / 2}
 							y={maxBarHeight + 20}
 							text-anchor="middle"
-							font-size="16"
+							font-size="18"
 							fill="#9ca3af"
 							font-family="monospace">{timeLabel}</text
 						>

@@ -2,7 +2,6 @@
 	import { type BlueskyProfile, type BlueskyFeedItem, postURL } from '$lib/bskyfoo';
 	import { formatDate, formatIsoDate, prettifyInteger } from '$lib/utils';
 	export let posts: BlueskyFeedItem[] = [];
-	export let profile: BlueskyProfile | null = null;
 
 	import FilterSelect from './select-filters.svelte';
 
