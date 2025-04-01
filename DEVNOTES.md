@@ -35,7 +35,20 @@ https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?limit=100&actor=bsk
 
 https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?limit=20&actor=nytimes.com
 
+## post stuff
+
+get post
+https://docs.bsky.app/docs/api/app-bsky-feed-get-posts
+
+https://public.api.bsky.app/xrpc/app.bsky.feed.getPosts?uris=at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.post/3le6bze3nus2c
+
 ### get quotes
 
 https://docs.bsky.app/docs/api/app-bsky-feed-get-quotes
 https://public.api.bsky.app/xrpc/app.bsky.feed.getQuotes?limit=20&uri=at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.post/3le6bze3nus2c
+
+### get likes
+
+https://docs.bsky.app/docs/api/app-bsky-feed-get-likes
+
+https://public.api.bsky.app/xrpc/app.bsky.feed.getLikes?limit=20&uri=at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.post/3le6bze3nus2c

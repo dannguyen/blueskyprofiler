@@ -177,7 +177,7 @@
 </div>
 
 <style>
-	@reference "../../app.css";
+	@reference "../../../app.css";
 
 	.card {
 		@apply bg-gray-800 rounded-lg p-4 mb-6 border border-gray-700;

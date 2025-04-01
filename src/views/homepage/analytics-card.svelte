@@ -7,8 +7,8 @@
 		extractPostLink
 	} from '$lib/bskyfoo';
 	import { formatDate } from '$lib/utils';
-	import HourlyPostsChart from '../../views/homepage/posts-chart-hourly.svelte';
-	import WeekdayPostsChart from '../../views/homepage/posts-chart-weekday.svelte';
+	import HourlyPostsChart from './analytics/chart-posts-hourly.svelte';
+	import WeekdayPostsChart from './analytics/chart-posts-dayofweek.svelte';
 	import { DateTime, Duration } from 'luxon';
 
 	export function toRoughHumanDuration(start: DateTime, end: DateTime): string {
@@ -128,6 +128,7 @@
 			(item) => !['quote', 'reply'].includes(item.post.thingType)
 		);
 
+		const replies = originalPosts.filter((item) => item.post.thingType === 'reply');
 		const linkedDomains = getDomainFrequency(posts);
 		const interactedUsers = getInteractedUsers(posts);
 
@@ -138,6 +139,7 @@
 				originalPostCount: 0,
 				postsPerDay: 0,
 				repostsPerDay: 0,
+				repliesPerDay: 0,
 				postsInLast12Hours: 0,
 				postsInLast24Hours: 0,
 				postsInLast4Hours: 0,
@@ -249,6 +251,7 @@
 			regularPostCount: regularPosts.length,
 			postsPerDay: +(originalPosts.length / dateRangeDays).toFixed(1),
 			repostsPerDay: +(reposts.length / dateRangeDays).toFixed(1),
+			repliesPerDay: +(replies.length / dateRangeDays).toFixed(1),
 			postsInLast12Hours,
 			postsInLast24Hours,
 			postsInLast4Hours,
@@ -318,22 +321,20 @@
 			</div>
 
 			<div class="analytics-section">
-				{#if posts.length > 0}
-					<div class="charts-container">
-						<div class="chart-wrapper weekday-chart">
-							<WeekdayPostsChart {posts} />
-						</div>
-
-						<div class="chart-wrapper hourly-chart">
-							<HourlyPostsChart {posts} />
-						</div>
+				<div class="charts-container">
+					<div class="chart-wrapper weekday-chart">
+						<WeekdayPostsChart {posts} />
 					</div>
-				{/if}
+
+					<div class="chart-wrapper hourly-chart">
+						<HourlyPostsChart {posts} />
+					</div>
+				</div>
 			</div>
 
 			<div class="analytics-grid">
 				<div class="analytics-section">
-					<h4 class="analytics-section-title">Recent Activity Rates</h4>
+					<h4 class="analytics-section-title">Recent Posting Activity</h4>
 					<div class="analytics-stat">
 						<span class="analytics-label">Latest post:</span>
 						<span class="analytics-value">
@@ -360,12 +361,45 @@
 					</div>
 
 					<div class="analytics-stat">
+						<span class="analytics-label">Recent replies/day rate:</span>
+						<span class="analytics-value">{analytics.repliesPerDay}</span>
+					</div>
+
+					<div class="analytics-stat">
 						<span class="analytics-label">Recent reposts/day rate:</span>
 						<span class="analytics-value">{analytics.repostsPerDay}</span>
 					</div>
+				</div>
+
+				<div class="analytics-section">
+					<h4 class="analytics-section-title">Engagement</h4>
+					<h5 class="analytics-section-subtitle">Total for Recent Posts</h5>
+
+					<div class="analytics-stat">
+						<span class="analytics-label">Likes:</span>
+						<span class="analytics-value">{analytics.engagement.likes.total.toLocaleString()}</span>
+					</div>
+					<div class="analytics-stat">
+						<span class="analytics-label">Reposts:</span>
+						<span class="analytics-value"
+							>{analytics.engagement.reposts.total.toLocaleString()}</span
+						>
+					</div>
+					<div class="analytics-stat">
+						<span class="analytics-label">Replies:</span>
+						<span class="analytics-value"
+							>{analytics.engagement.replies.total.toLocaleString()}</span
+						>
+					</div>
+					<div class="analytics-stat">
+						<span class="analytics-label">Quotes:</span>
+						<span class="analytics-value">{analytics.engagement.quotes.total.toLocaleString()}</span
+						>
+					</div>
 
 					<div class="analytics-subsection">
-						<h4 class="analytics-section-title">Engagement (Per Recent Post)</h4>
+						<h5 class="analytics-section-subtitle">Average Per Recent Post</h5>
+
 						<div class="analytics-stat">
 							<span class="analytics-label">Likes per post:</span>
 							<span class="analytics-value">{analytics.engagement.likes.average}</span>
@@ -381,33 +415,6 @@
 						<div class="analytics-stat">
 							<span class="analytics-label">Quotes per post:</span>
 							<span class="analytics-value">{analytics.engagement.quotes.average}</span>
-						</div>
-					</div>
-					<div class="analytics-subsection">
-						<h4 class="analytics-section-title">Engagement (Recent Total)</h4>
-						<div class="analytics-stat">
-							<span class="analytics-label">Likes:</span>
-							<span class="analytics-value"
-								>{analytics.engagement.likes.total.toLocaleString()}</span
-							>
-						</div>
-						<div class="analytics-stat">
-							<span class="analytics-label">Reposts:</span>
-							<span class="analytics-value"
-								>{analytics.engagement.reposts.total.toLocaleString()}</span
-							>
-						</div>
-						<div class="analytics-stat">
-							<span class="analytics-label">Replies:</span>
-							<span class="analytics-value"
-								>{analytics.engagement.replies.total.toLocaleString()}</span
-							>
-						</div>
-						<div class="analytics-stat">
-							<span class="analytics-label">Quotes:</span>
-							<span class="analytics-value"
-								>{analytics.engagement.quotes.total.toLocaleString()}</span
-							>
 						</div>
 					</div>
 				</div>
@@ -451,7 +458,7 @@
 
 					<div class="analytics-subsection">
 						<!-- show the media type per original post -->
-						<h4 class="analytics-section-title">Media</h4>
+						<h5 class="analytics-section-subtitle">Media</h5>
 						<div class="analytics-stat">
 							<span class="analytics-label">Text only:</span>
 							<span class="analytics-value"
@@ -463,99 +470,92 @@
 						<div class="analytics-stat">
 							<span class="analytics-label">With video:</span>
 							<span class="analytics-value"
-								>{analytics.postMediaTypes.video} ({Math.round(
-									(analytics.postMediaTypes.video / analytics.originalPostCount) * 100
-								)}%)</span
+								>{analytics.postMediaTypes.video} ({(
+									(analytics.postMediaTypes.video / analytics.originalPostCount) *
+									100
+								).toFixed(1)}%)</span
 							>
 						</div>
 						<div class="analytics-stat">
 							<span class="analytics-label">With images:</span>
 							<span class="analytics-value"
-								>{analytics.postMediaTypes.image} ({Math.round(
-									(analytics.postMediaTypes.image / analytics.originalPostCount) * 100
-								)}%)</span
+								>{analytics.postMediaTypes.image} ({(
+									(analytics.postMediaTypes.image / analytics.originalPostCount) *
+									100
+								).toFixed(1)}%)</span
 							>
 						</div>
-
-						<div class="analytics-subsection">
-							<div class="analytics-stat">
-								<span class="analytics-label">Image count:</span>
-								<span class="analytics-value">{analytics.media.totalImages}</span>
-							</div>
-							<div class="analytics-stat">
-								<span class="analytics-label">Images w/ ALT text:</span>
-								<span class="analytics-value">{analytics.media.imagesWithAlt}</span>
-							</div>
-							<div class="analytics-stat">
-								<span class="analytics-label">ALT text %:</span>
-								<span class="analytics-value">{analytics.media.altTextPercentage}%</span>
-							</div>
+						<div class="analytics-stat">
+							<span class="analytics-label">Images w/ ALT text:</span>
+							<span class="analytics-value"
+								>{analytics.media.imagesWithAlt} of
+								{analytics.media.totalImages} ({analytics.media.altTextPercentage}%)
+							</span>
 						</div>
 					</div>
 				</div>
 
-				<div class="analytics-section linking-activity">
-					<div class="analytics-subsection">
-						<h4 class="analytics-section-title">Users Interacted</h4>
-						<ul class="domains-list">
-							{#if analytics.interactedUsers.length > 0}
-								{#each showAllInteractions ? analytics.interactedUsers : analytics.interactedUsers.slice(0, DOMAIN_DISPLAY_LIMIT) as item}
-									<li>
-										{item.count}:
+				<div class="analytics-section linking-activity list-section">
+					<h4 class="analytics-section-title">Users Interacted</h4>
+					<ul class="domains-list">
+						{#if analytics.interactedUsers.length > 0}
+							{#each showAllInteractions ? analytics.interactedUsers : analytics.interactedUsers.slice(0, DOMAIN_DISPLAY_LIMIT) as item}
+								<li>
+									{item.count}:
 
-										<a class="interacted-user" href="https://bsky.app/profile/{item.handle}"
-											>@{item.handle}</a
-										>
-									</li>
-								{/each}
+									<a
+										class="interacted-user"
+										target="_blank"
+										href="https://bsky.app/profile/{item.handle}">@{item.handle}</a
+									>
+								</li>
+							{/each}
 
-								{#if analytics.interactedUsers.length > DOMAIN_DISPLAY_LIMIT}
-									<li class="show-more">
-										<button
-											on:click={() => (showAllInteractions = !showAllInteractions)}
-											class="show-more-btn"
-										>
-											{showAllInteractions
-												? `Show fewer`
-												: `Show all (${analytics.interactedUsers.length})`}
-										</button>
-									</li>
-								{/if}
-							{:else}
-								<li class="no-domains">No interacted users found</li>
+							{#if analytics.interactedUsers.length > DOMAIN_DISPLAY_LIMIT}
+								<li class="show-more">
+									<button
+										on:click={() => (showAllInteractions = !showAllInteractions)}
+										class="show-more-btn"
+									>
+										{showAllInteractions
+											? `Show fewer`
+											: `Show all (${analytics.interactedUsers.length})`}
+									</button>
+								</li>
 							{/if}
-						</ul>
-					</div>
+						{:else}
+							<li class="no-domains">No interacted users found</li>
+						{/if}
+					</ul>
+				</div>
 
-					<div class="analytics-subsection">
-						<h4 class="analytics-section-title">Domains Linked</h4>
-						<ul class="domains-list">
-							{#if analytics.linkedDomains.length > 0}
-								{#each showAllDomains ? analytics.linkedDomains : analytics.linkedDomains.slice(0, DOMAIN_DISPLAY_LIMIT) as item}
-									<li>
-										{item.count}:
+				<div class="analytics-section users-interacted list-section">
+					<h4 class="analytics-section-title">Domains Linked</h4>
+					<ul class="domains-list">
+						{#if analytics.linkedDomains.length > 0}
+							{#each showAllDomains ? analytics.linkedDomains : analytics.linkedDomains.slice(0, DOMAIN_DISPLAY_LIMIT) as item}
+								<li>
+									{item.count}:
 
-										<a class="domain-linked" href="https://{item.domain}">{item.domain}</a>
-									</li>
-								{/each}
+									<a class="domain-linked" target="_blank" href="https://{item.domain}"
+										>{item.domain}</a
+									>
+								</li>
+							{/each}
 
-								{#if analytics.linkedDomains.length > DOMAIN_DISPLAY_LIMIT}
-									<li class="show-more">
-										<button
-											on:click={() => (showAllDomains = !showAllDomains)}
-											class="show-more-btn"
-										>
-											{showAllDomains
-												? `Show less (${DOMAIN_DISPLAY_LIMIT} of ${analytics.linkedDomains.length})`
-												: `Show all (${analytics.linkedDomains.length})`}
-										</button>
-									</li>
-								{/if}
-							{:else}
-								<li class="no-domains">No linked domains found</li>
+							{#if analytics.linkedDomains.length > DOMAIN_DISPLAY_LIMIT}
+								<li class="show-more">
+									<button on:click={() => (showAllDomains = !showAllDomains)} class="show-more-btn">
+										{showAllDomains
+											? `Show less (${DOMAIN_DISPLAY_LIMIT} of ${analytics.linkedDomains.length})`
+											: `Show all (${analytics.linkedDomains.length})`}
+									</button>
+								</li>
 							{/if}
-						</ul>
-					</div>
+						{:else}
+							<li class="no-domains">No linked domains found</li>
+						{/if}
+					</ul>
 				</div>
 			</div>
 		</section>
@@ -566,22 +566,27 @@
 	@reference "../../app.css";
 
 	.analytics-grid {
-		@apply grid grid-cols-2 md:grid-cols-3 gap-4 mt-2;
+		@apply grid grid-cols-6  gap-4 mt-2;
 	}
 
 	.analytics-section {
-		@apply bg-gray-800/50 rounded p-3;
+		@apply bg-gray-800/50 rounded p-3 col-span-2 md:col-span-2;
 	}
 
 	.analytics-subsection {
 		@apply mt-3;
-		.analytics-subsection {
-			@apply mt-0;
-			@apply pl-3;
-		}
 	}
+
 	.analytics-section-title {
 		@apply text-lg text-gray-300 font-medium mb-2 border-b border-gray-700 pb-1;
+	}
+
+	.analytics-section-subtitle {
+		@apply text-sm;
+	}
+
+	.list-section {
+		@apply col-span-6 md:col-span-3;
 	}
 
 	.analytics-stat {

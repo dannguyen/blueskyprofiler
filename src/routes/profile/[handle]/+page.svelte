@@ -232,18 +232,6 @@
 		@apply bg-gray-800 rounded-lg p-4 mb-6 border border-gray-700;
 	}
 
-	.load-more-header {
-		@apply flex justify-between items-center mb-4;
-	}
-
-	.load-more-title {
-		@apply text-xl font-bold text-blue-400;
-	}
-
-	.current-stats {
-		@apply text-sm text-gray-400;
-	}
-
 	.stats-count {
 		@apply text-blue-300 font-bold;
 	}
