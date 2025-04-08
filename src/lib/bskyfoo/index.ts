@@ -1,8 +1,5 @@
-// Re-export everything from core
 export * from './core';
+export * from './fetching';
 
-// Re-export everything from profile
-export * from './profile';
-
-// Re-export everything from post
-export * from './post';
+export * from './classes/post';
+export * from './classes/user';

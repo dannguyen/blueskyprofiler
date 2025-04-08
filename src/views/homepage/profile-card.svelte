@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type BlueskyProfile } from '$lib/bskyfoo';
+	import { BlueskyProfile } from '$lib/bskyfoo';
 	import { formatDate, currentAgeInDays, currentAgePrettified } from '$lib/utils';
 	export let profile: BlueskyProfile | null = null;
 
@@ -18,7 +18,7 @@
 		<div class="profile-info">
 			<h2 class="profile-name">{profile.displayName || profile.handle}</h2>
 			<p class="profile-handle">
-				<a href="https://bsky.app/profile/{profile.handle}">@{profile.handle}</a>
+				<a href={profile.url}>@{profile.handle}</a>
 			</p>
 		</div>
 	</div>

@@ -1,5 +1,5 @@
-import { type BlueskyPost, type BlueskyFeedItem } from '$lib/bskyfoo';
 import numeral from 'numeral';
+import { DateTime, Duration } from 'luxon';
 
 // Process handle input to handle common formats
 export function cleanHandleInput(rawHandle: string): string {
@@ -152,4 +152,57 @@ export function prettifyInteger(num: number): string {
 // Get word count from post text
 export function getWordCount(text: string): number {
 	return text.trim().split(/\s+/).length;
+}
+
+export function roughlyHumanizeDuration(start: Date, end: Date): string {
+	const units = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'];
+
+	const startDt = DateTime.fromJSDate(start);
+	const endDt = DateTime.fromJSDate(end);
+	const duration = endDt.diff(startDt, units).toObject();
+
+	if ('seconds' in duration) {
+		duration.seconds = Math.round(duration.seconds!);
+	}
+
+	const durationList = Object.entries(duration);
+	const cleanedDurationList = [];
+	const ix = durationList.findIndex((v) => v[1] > 0);
+	const jx = ix + 1;
+
+	if (ix >= 0) {
+		cleanedDurationList.push(durationList[ix]);
+		if (jx < units.length) {
+			if (durationList[jx][1] > 0) {
+				cleanedDurationList.push(durationList[jx]);
+			}
+		}
+	} else {
+		cleanedDurationList.push(['seconds', 0]);
+	}
+
+	const cleanedDuration = Object.fromEntries(cleanedDurationList);
+
+	return Duration.fromObject(cleanedDuration).toHuman();
+}
+
+export function humanizeTimeFromNow(dt: Date): string {
+	return DateTime.fromJSDate(dt).toRelative();
+}
+
+const ICON_TYPES = {
+	repost: 'copy',
+	reply: 'comment',
+	quote: 'comments',
+	like: 'thumbs-up',
+	interaction: 'bell',
+	original: 'pen-to-square',
+	createdAt: 'clock'
+};
+export function makeIcon(icontype: string): string {
+	let iconname = ICON_TYPES[icontype];
+	if (iconname === undefined) {
+		iconname = 'circle-exclamation';
+	}
+	return `<i class="fa-regular fa-${iconname}"></i>`;
 }

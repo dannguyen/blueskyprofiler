@@ -1,11 +1,6 @@
 <script lang="ts">
-	import {
-		type BlueskyProfile,
-		type BlueskyFeedItem,
-		type BlueskyPost,
-		postURL
-	} from '$lib/bskyfoo';
-	import { formatDate, prettifyInteger } from '$lib/utils';
+	import { BlueskyThing, type BlueskyFeedItem } from '$lib/bskyfoo';
+	import PostCard from './PostCard.svelte';
 
 	export let posts: BlueskyFeedItem[] = [];
 
@@ -14,7 +9,7 @@
 	 * @param posts Array of BlueskyFeedItems to analyze
 	 * @returns Array of up to 5 posts with highest engagement, sorted in descending order
 	 */
-	export function getTopEngagementPosts(posts: BlueskyFeedItem[]): BlueskyPost[] {
+	export function getTopEngagementPosts(posts: BlueskyFeedItem[]): BlueskyThing[] {
 		if (!posts || posts.length === 0) return [];
 
 		// Filter out reposts for posting activity summary since they don't have repost timestamps
@@ -35,7 +30,7 @@
 	/**
 	 * Determine if a post is featured (highest engagement)
 	 */
-	function isFeaturePost(post: BlueskyPost, bestPosts: BlueskyPost[]): boolean {
+	function isFeaturePost(post: BlueskyThing, bestPosts: BlueskyThing[]): boolean {
 		if (bestPosts.length === 0) return false;
 		return post.uri === bestPosts[0].uri;
 	}
@@ -53,75 +48,7 @@
 			<!-- Newspaper-style grid layout for posts -->
 			<div class="newspaper-grid">
 				{#each bestPosts as post, index}
-					<div class="post-card">
-						<!-- Post header with date and metrics -->
-						<!-- Compact header with date and all metrics in one row -->
-						<div class="post-header">
-							<div class="post-header-left">
-								<a href={postURL(post)} target="_blank" class="post-date">
-									{formatDate(post.record.createdAt)}
-								</a>
-
-								<div class="post-metrics">
-									<div class="metric" title="Likes">
-										<span class="metric-icon">
-											<i class="fa-regular fa-thumbs-up"></i>
-										</span>
-										<span class="metric-value">{prettifyInteger(post.likeCount || 0)}</span>
-									</div>
-									<div class="metric" title="Reposts">
-										<i class="fa-regular fa-copy"></i>
-										<span class="metric-value">{prettifyInteger(post.repostCount || 0)}</span>
-									</div>
-									<div class="metric" title="Replies">
-										<i class="fa-regular fa-comment"></i>
-										<span class="metric-value">{prettifyInteger(post.replyCount || 0)}</span>
-									</div>
-									<div class="metric" title="Quotes">
-										<i class="fa-regular fa-comments"></i>
-										<span class="metric-value">{prettifyInteger(post.quoteCount || 0)}</span>
-									</div>
-								</div>
-							</div>
-
-							<div class="post-header-right">
-								<div class="total-engagement" title="Total Interactions">
-									<span class="total-label">Interactions</span>
-									<span class="total-value">{post.interactions}</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Post content -->
-						<div class="post-content">
-							{post.record.text}
-						</div>
-
-						<!-- Post media -->
-						{#if post.embed?.images && post.embed.images.length > 0}
-							<div class="post-images">
-								{#each post.embed.images as image, i}
-									<img
-										src={image.fullsize}
-										alt={image.alt || `Image ${i + 1}`}
-										class="post-image"
-									/>
-								{/each}
-							</div>
-						{/if}
-
-						{#if post.embed?.media?.images && post.embed.media.images.length > 0}
-							<div class="post-images">
-								{#each post.embed.media.images as image, i}
-									<img
-										src={image.fullsize}
-										alt={image.alt || `Image ${i + 1}`}
-										class="post-image"
-									/>
-								{/each}
-							</div>
-						{/if}
-					</div>
+					<PostCard {post} />
 				{/each}
 			</div>
 		</section>

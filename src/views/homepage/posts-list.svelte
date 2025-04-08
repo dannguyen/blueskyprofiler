@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { type BlueskyProfile, type BlueskyFeedItem, postURL } from '$lib/bskyfoo';
-	import { formatDate, formatIsoDate, prettifyInteger } from '$lib/utils';
+	import { type BlueskyFeedItem } from '$lib/bskyfoo';
+	import { formatIsoDate, makeIcon } from '$lib/utils';
 	export let posts: BlueskyFeedItem[] = [];
 
 	import FilterSelect from './select-filters.svelte';
 
 	function tallyPostTypesForFilterLabel(posts) {
 		const POST_TYPES = [
-			{ value: 'post', label: 'Posts', count: 0 },
-			{ value: 'repost', label: 'Reposts', count: 0 },
-			{ value: 'quote', label: 'Quotes', count: 0 },
-			{ value: 'reply', label: 'Replies', count: 0 }
+			{ value: 'original', label: 'Originals', count: 0, icon: 'original' },
+			{ value: 'repost', label: 'Reposts', count: 0, icon: 'repost' },
+			{ value: 'quote', label: 'Quotes', count: 0, icon: 'quote' },
+			{ value: 'reply', label: 'Replies', count: 0, icon: 'reply' }
 		];
 
 		// yikes this is ugly!
@@ -27,15 +27,44 @@
 
 	// Now the selected post type is a string that can also be "all"
 	let selectedPostType: string = 'all';
+	let selectedSortOption: string = 'createdAt';
 
 	// Function to handle post type selection changes from the RadioDropdown
 	function handlePostTypeChange(event: CustomEvent<string>) {
 		selectedPostType = event.detail;
 	}
-	// Filter posts based on the selected type
+
+	function handleSortOptionChange(event: CustomEvent<string>) {
+		selectedSortOption = event.detail;
+	}
+
+	// Update the filtering logic to handle multi-select
 	$: filteredPosts = posts.filter((item) => {
 		const postType = item.post.thingType;
+		if (Array.isArray(selectedPostType)) {
+			return selectedPostType.includes('all') || selectedPostType.includes(postType);
+		}
 		return selectedPostType === 'all' || postType === selectedPostType;
+	});
+
+	$: sortedPosts = [...filteredPosts].sort((a, b) => {
+		switch (selectedSortOption) {
+			case 'interactions':
+				return b.post.interactions - a.post.interactions;
+			case 'likes':
+				return (b.post.likeCount || 0) - (a.post.likeCount || 0);
+			case 'reposts':
+				return (b.post.repostCount || 0) - (a.post.repostCount || 0);
+			case 'replies':
+				return (b.post.replyCount || 0) - (a.post.replyCount || 0);
+			case 'quotes':
+				return (b.post.quoteCount || 0) - (a.post.quoteCount || 0);
+			case 'createdAt':
+			default:
+				return (
+					new Date(b.post.thingCreatedAt).getTime() - new Date(a.post.thingCreatedAt).getTime()
+				);
+		}
 	});
 </script>
 
@@ -46,9 +75,25 @@
 
 		<div class="filters">
 			<FilterSelect
+				options={[
+					{ value: 'createdAt', label: 'Created At', icon: 'createdAt' },
+					{ value: 'interactions', label: 'Interactions', icon: 'interaction' },
+					{ value: 'replies', label: 'Replies', icon: 'reply' },
+					{ value: 'likes', label: 'Likes', icon: 'like' },
+					{ value: 'reposts', label: 'Reposts', icon: 'repost' },
+					{ value: 'quotes', label: 'Quotes', icon: 'quote' }
+				]}
+				bind:selected={selectedSortOption}
+				on:change={handleSortOptionChange}
+				buttonText="Sort By: {selectedSortOption}"
+			/>
+
+			<FilterSelect
 				options={tallied_post_types}
 				bind:selected={selectedPostType}
 				on:change={handlePostTypeChange}
+				isMultiSelect={true}
+				buttonText="Filter Post Types: {selectedPostType}"
 			/>
 		</div>
 
@@ -57,20 +102,20 @@
 				<div class="header-item header-date">Date</div>
 				<div class="header-item header-content">Content</div>
 				<div class="header-item header-metrics">
-					<div class="metric-item"><i class="icon fa-regular fa-bell"></i> Interactions</div>
+					<div class="metric-item">{@html makeIcon('interaction')}Interactions</div>
 
-					<div class="metric-item"><i class="icon fa-regular fa-thumbs-up"></i> Likes</div>
-					<div class="metric-item"><i class="icon fa-regular fa-copy"></i> Reposts</div>
-					<div class="metric-item"><i class="icon fa-regular fa-comment"></i> Replies</div>
-					<div class="metric-item"><i class="icon fa-regular fa-comments"></i> Quotes</div>
+					<div class="metric-item">{@html makeIcon('like')} Likes</div>
+					<div class="metric-item">{@html makeIcon('repost')} Reposts</div>
+					<div class="metric-item">{@html makeIcon('reply')} Replies</div>
+					<div class="metric-item">{@html makeIcon('quote')} Quotes</div>
 				</div>
 			</div>
 
-			{#each filteredPosts as item}
+			{#each sortedPosts as item}
 				<div class="post-row {item.post.thingType}">
 					<div class="post-date-column">
 						<div class="post-date">
-							<a href={postURL(item.post)} target="_blank" class="link">
+							<a href={item.post.url} target="_blank" class="link">
 								{formatIsoDate(item.post.thingCreatedAt)}
 							</a>
 						</div>

@@ -14,7 +14,7 @@ export function handleApiError(error: unknown, context: string): never {
 }
 
 // Import type from the appropriate module
-import type { BlueskyPost } from './post';
+import type { BlueskyPost } from './classes/post';
 
 /**
  * Determine the media type of a post

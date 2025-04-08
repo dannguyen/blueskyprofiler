@@ -7,7 +7,7 @@
 		getBatchUserPosts,
 		getUserPosts,
 		API_HOST,
-		type BlueskyProfile,
+		BlueskyProfile,
 		type BlueskyFeedItem
 	} from '$lib/bskyfoo';
 	import { SITE_TITLE } from '$lib';

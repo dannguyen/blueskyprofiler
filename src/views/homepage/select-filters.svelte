@@ -1,22 +1,47 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import { makeIcon } from '$lib/utils';
 
 	// Options provided from the parent component.
 	export let options: { value: string; label: string; count: number }[] = [];
 	// The currently selected option (a string). Use "all" for the "All" option.
-	export let selected: string = '';
+	export let selected: string | string[] = ['all']; // Default to "All" selected for multi-select
+	export let buttonText: string = 'Filter Post Type'; // Default button text
+	export let isMultiSelect: boolean = false; // Default to single-select
 
 	let open = false;
 	let el: HTMLElement;
 
 	// Define the "All" option.
-	const allOption = { value: 'all', label: 'All', count: null };
+	const allOption = {
+		value: 'all',
+		label: 'All',
+		count: options.reduce((sum, option) => sum + (option.count || 0), 0)
+	}; // Calculate total count for "All"
 
 	function selectOption(value: string) {
-		selected = value;
-		open = false;
-		// Dispatch a native custom event with the selected value.
+		if (isMultiSelect) {
+			if (value === 'all') {
+				selected = ['all']; // Clear all other selections and select "All"
+			} else {
+				if (Array.isArray(selected)) {
+					selected = selected.filter((v) => v !== 'all'); // Remove "All" if another option is selected
+					if (selected.includes(value)) {
+						selected = selected.filter((v) => v !== value);
+					} else {
+						selected = [...selected, value];
+					}
+				} else {
+					selected = [value];
+				}
+			}
+		} else {
+			selected = value;
+			open = false;
+		}
+
+		// Dispatch a native custom event with the selected value(s).
 		el.dispatchEvent(new CustomEvent('change', { detail: selected }));
 	}
 
@@ -45,32 +70,37 @@
 
 <div class="dropdown" bind:this={el}>
 	<button type="button" class="dropdown-toggle" on:click={toggleDropdown}>
-		Filter Post Type
+		{buttonText}
 	</button>
 	{#if open}
 		<div in:slide={{ duration: 200 }} out:slide={{ duration: 300 }} class="dropdown-menu">
-			<!-- "All" option -->
-			<label class="dropdown-item">
-				<input
-					type="radio"
-					name="dropdown"
-					value={allOption.value}
-					checked={selected === allOption.value}
-					on:change={() => selectOption(allOption.value)}
-				/>
-				{allOption.label}
-			</label>
-			<!-- Other options -->
+			<!-- Add "All" option for multi-select -->
+			{#if isMultiSelect}
+				<label class="dropdown-item">
+					<input
+						type="checkbox"
+						value={allOption.value}
+						checked={Array.isArray(selected) && selected.includes(allOption.value)}
+						on:change={() => selectOption(allOption.value)}
+					/>
+					{allOption.label} ({allOption.count})
+				</label>
+			{/if}
+
+			<!-- Options for multi-select or single-select -->
 			{#each options as option}
 				<label class="dropdown-item">
 					<input
-						type="radio"
+						type={isMultiSelect ? 'checkbox' : 'radio'}
 						name="dropdown"
 						value={option.value}
-						checked={selected === option.value}
+						checked={isMultiSelect ? selected.includes(option.value) : selected === option.value}
 						on:change={() => selectOption(option.value)}
 					/>
-					{option.label}&nbsp;({option.count})
+
+					{#if option.icon}{@html makeIcon(
+							option.icon
+						)}&nbsp;{/if}{option.label}{#if isMultiSelect}&nbsp;({option.count}){/if}
 				</label>
 			{/each}
 		</div>
