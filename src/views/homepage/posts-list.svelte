@@ -3,7 +3,8 @@
 	import { formatIsoDate, makeIcon } from '$lib/utils';
 	export let posts: BlueskyFeedItem[] = [];
 
-	import FilterSelect from './select-filters.svelte';
+	import CheckboxFilter from './interaction/CheckboxFilter.svelte';
+	import RadioSort from './interaction/RadioSort.svelte';
 
 	function tallyPostTypesForFilterLabel(posts) {
 		const POST_TYPES = [
@@ -74,7 +75,7 @@
 		<h2 class="section-title">Most Recent {posts.length} Posts</h2>
 
 		<div class="filters">
-			<FilterSelect
+			<RadioSort
 				options={[
 					{ value: 'createdAt', label: 'Created At', icon: 'createdAt' },
 					{ value: 'interactions', label: 'Interactions', icon: 'interaction' },
@@ -88,11 +89,10 @@
 				buttonText="Sort By: {selectedSortOption}"
 			/>
 
-			<FilterSelect
+			<CheckboxFilter
 				options={tallied_post_types}
 				bind:selected={selectedPostType}
 				on:change={handlePostTypeChange}
-				isMultiSelect={true}
 				buttonText="Filter Post Types: {selectedPostType}"
 			/>
 		</div>
