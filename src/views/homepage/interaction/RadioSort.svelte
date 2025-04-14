@@ -62,30 +62,5 @@
 </div>
 
 <style>
-	@reference "../../../app.css";
-
-	.dropdown {
-		position: relative;
-		display: inline-block;
-		@apply bg-sky-800 rounded p-1 mb-2;
-	}
-	.dropdown-toggle {
-		@apply px-1 py-1;
-		cursor: pointer;
-	}
-	.dropdown-menu {
-		@apply px-3 py-1 bg-sky-800 mt-1;
-		position: absolute;
-		top: 100%;
-		left: 0;
-		z-index: 1000;
-		box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-	}
-	.dropdown-item {
-		display: block;
-		@apply mt-1 text-xs;
-	}
-	.dropdown-item:last-child {
-		@apply mb-1;
-	}
+	@import './common.css';
 </style>

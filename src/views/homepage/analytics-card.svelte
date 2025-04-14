@@ -362,6 +362,14 @@
 
 	.chart-wrapper {
 		@apply w-full;
+		@apply bg-gray-800 rounded-lg p-4 mb-6 border border-gray-700;
+
+		width: 100%;
+	}
+
+	canvas {
+		width: 100%;
+		height: 100%; /* Ensure the canvas fills the container */
 	}
 
 	@media (min-width: 1024px) {
