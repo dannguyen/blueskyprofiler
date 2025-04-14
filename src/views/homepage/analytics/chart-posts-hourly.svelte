@@ -7,96 +7,51 @@
 		CategoryScale,
 		LinearScale,
 		Tooltip,
-		Legend
+		Legend,
+		plugins
 	} from 'chart.js';
+
+	import ChartDataLabels from 'chartjs-plugin-datalabels';
 	import type { BlueskyFeedItem } from '$lib/bskyfoo';
 
 	Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-	export let posts: BlueskyFeedItem[] = [];
-
 	let chartCanvas: HTMLCanvasElement;
 	let chartInstance: Chart;
-
-	onMount(() => {
-		const hourlyData = calculateHourlyCounts(posts);
-
-		chartInstance = new Chart(chartCanvas, {
-			type: 'bar',
-			data: {
-				labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
-				datasets: [
-					{
-						label: 'Weekdays',
-						data: hourlyData.weekdayCounts,
-						backgroundColor: '#3b82f6'
-					},
-					{
-						label: 'Weekends',
-						data: hourlyData.weekendCounts,
-						backgroundColor: '#8b5cf6'
-					}
-				]
-			},
-			options: {
-				responsive: true,
-				plugins: {
-					legend: {
-						display: true
-					}
-				},
-				scales: {
-					x: {
-						stacked: true,
-						title: {
-							display: true,
-							text: 'Hour of the Day'
-						}
-					},
-					y: {
-						stacked: true,
-						title: {
-							display: true,
-							text: 'Number of Posts'
-						},
-						beginAtZero: true
-					}
-				}
-			}
-		});
-
-		return () => {
-			chartInstance.destroy();
-		};
+	let { posts } = $props();
+	let hourlyData = $derived.by(() => {
+		return calculateHourlyCounts(posts);
 	});
 
-	$: {
-		if (chartInstance) {
-			chartInstance.destroy();
-		}
-
-		const hourlyData = calculateHourlyCounts(posts);
-
-		chartInstance = new Chart(chartCanvas, {
+	let chartOptions = $derived.by(() => {
+		return {
 			type: 'bar',
+			plugins: [ChartDataLabels],
 			data: {
 				labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
 				datasets: [
 					{
 						label: 'Weekdays',
 						data: hourlyData.weekdayCounts,
-						backgroundColor: '#3b82f6'
+						backgroundColor: '#3b82f6',
+						datalabels: {
+							color: '#FFFFFF'
+						}
 					},
 					{
 						label: 'Weekends',
 						data: hourlyData.weekendCounts,
-						backgroundColor: '#8b5cf6'
+						backgroundColor: '#8b5cf6',
+						datalabels: {
+							color: '#FFFFFF'
+						}
 					}
 				]
 			},
 			options: {
 				responsive: true,
 				maintainAspectRatio: false,
+
 				plugins: {
 					legend: {
 						display: true
@@ -120,8 +75,16 @@
 					}
 				}
 			}
-		});
-	}
+		};
+	});
+
+	$effect(() => {
+		chartInstance = new Chart(chartCanvas, chartOptions);
+
+		return () => {
+			chartInstance.destroy();
+		};
+	});
 
 	onDestroy(() => {
 		if (chartInstance) {

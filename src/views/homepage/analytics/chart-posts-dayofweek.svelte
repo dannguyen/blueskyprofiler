@@ -9,6 +9,8 @@
 		Tooltip,
 		Legend
 	} from 'chart.js';
+	import ChartDataLabels from 'chartjs-plugin-datalabels';
+
 	import type { BlueskyFeedItem } from '$lib/bskyfoo';
 
 	Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -22,12 +24,17 @@
 	let chartOptions = $derived.by(() => {
 		return {
 			type: 'bar',
+			plugins: [ChartDataLabels],
 			data: {
 				labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
 				datasets: [
 					{
 						label: 'Posts',
 						data: weekdayData.dayCounts,
+						datalabels: {
+							color: '#FFFFFF',
+							anchor: 'end'
+						},
 						backgroundColor: [
 							'#3b82f6',
 							'#3b82f6',
@@ -42,6 +49,7 @@
 			},
 			options: {
 				responsive: true,
+				maintainAspectRatio: false,
 				plugins: {
 					legend: {
 						display: false
