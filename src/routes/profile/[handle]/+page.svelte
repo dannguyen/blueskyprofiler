@@ -26,7 +26,8 @@
 	let error: string | null = null;
 	let batchIterations: number = 3;
 	let lastCursor: string | null = null;
-	const MAX_POSTS = 2000; // Maximum number of posts to load
+	const MAX_POSTS = 10000; // Maximum number of posts to load
+	let loadMoreAmount = 100;
 
 	// Progress tracking
 	let fetchProgress = { current: 0, total: batchIterations, posts: 0 };
@@ -85,42 +86,57 @@
 
 		isLoading = true;
 		searchMessage = `Fetching more posts for ${handle}...`;
+		error = null;
 
 		try {
-			// Setup progress tracking for additional batch
-			fetchProgress = { current: 0, total: 1, posts: posts.length };
+			let postsLoadedInThisRun = 0;
+			const postsToLoad = loadMoreAmount;
+			let currentPosts = [...posts];
 
-			// Add a 0.5 second delay before making the API call to avoid rate limiting
-			await new Promise((resolve) => setTimeout(resolve, 500));
+			while (lastCursor && postsLoadedInThisRun < postsToLoad && currentPosts.length < MAX_POSTS) {
+				searchMessage = `Fetching more posts... (${currentPosts.length} posts so far)`;
 
-			// Use the current cursor to fetch from that point
-			const url = `${API_HOST}/xrpc/app.bsky.feed.getAuthorFeed?actor=${handle}&limit=100&cursor=${encodeURIComponent(lastCursor)}`;
-			const allNewPosts: BlueskyFeedItem[] = [...posts]; // Start with existing posts
+				// Fetch the next batch
+				const response = await getUserPosts(handle, lastCursor);
 
-			fetchProgress = { current: 1, total: 1, posts: posts.length };
-			searchMessage = `Fetching more posts... (${posts.length} posts so far)`;
+				if (response.feed && response.feed.length > 0) {
+					const remainingCapacityGlobal = MAX_POSTS - currentPosts.length;
+					const remainingCapacityForThisRun = postsToLoad - postsLoadedInThisRun;
 
-			// Fetch the next batch
-			const response = await getUserPosts(handle, lastCursor);
+					const postsToAddCount = Math.min(
+						response.feed.length,
+						remainingCapacityGlobal,
+						remainingCapacityForThisRun
+					);
+					const postsToAdd = response.feed.slice(0, postsToAddCount);
 
-			if (response.feed && response.feed.length > 0) {
-				// Add new posts, but respect the MAX_POSTS limit
-				const remainingCapacity = MAX_POSTS - allNewPosts.length;
-				const postsToAdd = response.feed.slice(0, remainingCapacity);
-				allNewPosts.push(...postsToAdd);
+					currentPosts.push(...postsToAdd);
+					postsLoadedInThisRun += postsToAdd.length;
 
-				// Update cursor only if we didn't hit the limit, otherwise set to null
-				if (allNewPosts.length < MAX_POSTS && response.cursor) {
-					lastCursor = response.cursor;
+					// Update posts reactively
+					posts = currentPosts;
+
+					if (response.cursor && currentPosts.length < MAX_POSTS) {
+						lastCursor = response.cursor;
+					} else {
+						lastCursor = null; // No more posts or reached limit
+					}
 				} else {
-					lastCursor = null; // No more posts available or reached limit
+					lastCursor = null; // No more posts available
 				}
-			} else {
-				lastCursor = null; // No more posts available
+
+				// Apply delay for the *next* API call, if any, based on the *current* total posts
+				if (lastCursor && currentPosts.length < MAX_POSTS) {
+					let delayMs = 200; // Base delay for every fetch
+
+					// Add extra delay if we just crossed a 1000-post boundary
+					if (currentPosts.length > 0 && currentPosts.length % 1000 === 0) {
+						delayMs += 500; // Add extra 500ms delay
+					}
+					await new Promise((resolve) => setTimeout(resolve, delayMs));
+				}
 			}
 
-			// Update posts with all new data
-			posts = allNewPosts;
 			searchMessage = '';
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'An error occurred fetching additional posts';
@@ -163,19 +179,36 @@
 
 			{#if !isLoading && posts.length > 0}
 				<div class="load-more-container">
-					<button
-						on:click={loadMorePosts}
-						class="load-more-btn"
-						disabled={isLoading || !lastCursor || posts.length >= MAX_POSTS}
-					>
-						{#if posts.length >= MAX_POSTS}
-							Maximum Posts Loaded (2,000)
-						{:else if !lastCursor}
-							No More Posts Available
-						{:else}
-							Load More Posts (<span class="stats-count">{posts.length}</span> posts loaded)
-						{/if}
-					</button>
+					<div class="load-more-controls">
+						<button
+							on:click={loadMorePosts}
+							class="load-more-btn"
+							disabled={isLoading || !lastCursor || posts.length >= MAX_POSTS}
+						>
+							{#if isLoading}
+								Loading...
+							{:else if posts.length >= MAX_POSTS}
+								Maximum Posts ({MAX_POSTS}) Loaded
+							{:else if !lastCursor}
+								No More Posts
+							{:else}
+								Load
+							{/if}
+						</button>
+						<input
+							type="number"
+							bind:value={loadMoreAmount}
+							min="100"
+							max={MAX_POSTS - posts.length > 1000 ? 1000 : MAX_POSTS - posts.length}
+							step="100"
+							class="load-more-input"
+							disabled={isLoading || !lastCursor || posts.length >= MAX_POSTS}
+						/>
+						<span class="input-label">more posts</span>
+					</div>
+					<p class="posts-loaded-text">
+						<span class="stats-count">{posts.length} / {MAX_POSTS}</span> posts loaded
+					</p>
 				</div>
 			{/if}
 
@@ -232,11 +265,33 @@
 		@apply bg-gray-800 rounded-lg p-4 mb-6 border border-gray-700;
 	}
 
+	.load-more-controls {
+		@apply flex items-center gap-2;
+	}
+
+	.load-more-input {
+		@apply bg-gray-300 border border-gray-600 rounded px-3 py-2 text-blue-400 w-28 text-center disabled:bg-gray-700/50 disabled:cursor-not-allowed;
+		-moz-appearance: textfield; /* Firefox */
+	}
+	.load-more-input::-webkit-outer-spin-button,
+	.load-more-input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	.posts-loaded-text {
+		@apply text-sm text-gray-400 mt-2 text-center;
+	}
+
+	.input-label {
+		@apply text-gray-300;
+	}
+
 	.stats-count {
 		@apply text-blue-300 font-bold;
 	}
 
 	.load-more-btn {
-		@apply bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded transition-colors w-full;
+		@apply bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded transition-colors flex-grow;
 	}
 </style>
