@@ -5,7 +5,7 @@
 	let isLoading = false;
 
 	import { goto } from '$app/navigation';
-	import { resolveRoute } from '$app/paths';
+	import { resolve } from '$app/paths';
 
 	function handleSearch() {
 		if (!handle) return;
@@ -14,14 +14,14 @@
 		const processedHandle = cleanHandleInput(handle);
 
 		// Navigate to the search page with the processed handle
-		goto(resolveRoute(`/profile/${processedHandle}`));
+		goto(resolve(`/profile/${processedHandle}`));
 	}
 </script>
 
 <div class="container">
 	<div class="content">
 		<h1 class="title">
-			<a href={resolveRoute('/')}>{SITE_TITLE}</a>
+			<a href={resolve('/')}>{SITE_TITLE}</a>
 		</h1>
 		<div class="footnote">
 			Github repo at <a class="link" href="http://github.com/dannguyen/blueskyprofiler/"
@@ -48,15 +48,20 @@
 			<p class="example-title">Examples:</p>
 			<ul class="example-list">
 				<li>
-					<a href={resolveRoute('/profile/jamesgunn.bsky.social')} class="example-link"
+					<a href={resolve('/profile/bsky.app')} class="example-link"
+						>bsky.app</a
+					>
+				</li>
+				<li>
+					<a href={resolve('/profile/jamesgunn.bsky.social')} class="example-link"
 						>jamesgunn.bsky.social</a
 					>
 				</li>
 				<li>
-					<a href={resolveRoute('/profile/theonion.com')} class="example-link">theonion.com</a>
+					<a href={resolve('/profile/theonion.com')} class="example-link">theonion.com</a>
 				</li>
 				<li>
-					<a href={resolveRoute('/profile/jay.bsky.team')} class="example-link">jay.bsky.team</a>
+					<a href={resolve('/profile/jay.bsky.team')} class="example-link">jay.bsky.team</a>
 				</li>
 			</ul>
 		</div>
@@ -108,9 +113,6 @@
 		@apply px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors font-medium;
 	}
 
-	.search-message {
-		@apply mt-4 text-lg text-yellow-300 font-medium;
-	}
 
 	.examples {
 		@apply mt-8 p-4 bg-gray-700/30 border border-gray-700 rounded-lg;
